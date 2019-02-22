@@ -40,4 +40,8 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/datastore/testingkey')
             self.assertEqual(r.text, '"testingvalue"')
 
+        def test_delete_data_store_when_key_does_not_exist_returns_200(self):
+            r = requests.delete(baseurl + '/datastore/doesnotexist')
+            self.assertEqual(r.status_code, 200)
+
     return ClientTests

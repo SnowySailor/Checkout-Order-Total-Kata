@@ -27,6 +27,12 @@ def MakeRequestHandler(is_testing_mode, datastore):
             else:
                 set_response(self, 404, '404', 'text/html')
 
+        def do_DELETE(self):
+            if self.path.startswith('/datastore/') and is_testing_mode: # Route only available for testing mode
+                self.do_delete_data_store()
+            else:
+                set_response(self, 404, '404', 'text/html')
+
         # HTTP GET handlers
         def do_get_ping(self):
             set_response(self, 200, 'pong', 'text/text')
@@ -34,7 +40,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_get_data_store(self):
             data_id = get_path_id(self.path)
             value = datastore.get(data_id)
-            set_response(self, 200, json.dumps(value), 'application/json')
+            set_response(self, 200, json.dumps(value))
 
 
         # HTTP POST handlers
@@ -42,7 +48,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             # Read the post variables and return them to the client
             post_vars = parse_post_vars(self)
             json_resp = json.dumps(post_vars)
-            set_response(self, 200, json_resp, 'application/json')
+            set_response(self, 200, json_resp)
 
         def do_post_data_store(self):
             post_vars = parse_post_vars(self)
@@ -55,7 +61,12 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 400, 'Must provide "value"', 'text/text')
             else:
                 datastore.set(key, value)
-                set_response(self, 200, '', 'application/json')
+                set_response(self, 200, '')
+
+
+        # HTTP DELETE handlers
+        def do_delete_data_store(self):
+            set_response(self, 200, '')
 
     return RequestHandler
 
