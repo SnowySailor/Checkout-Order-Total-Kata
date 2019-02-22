@@ -31,3 +31,8 @@ class HelpersTests(unittest.TestCase):
     def test_parse_post_vars_when_post_to_ping_with_no_data_get_back_no_data(self):
         r = requests.post('http://localhost:19546/ping')
         self.assertEqual(r.text, '{}')
+
+    def test_parse_post_vars_when_post_to_ping_with_data_get_back_same_data(self):
+        post_data = {'test': 'ing'}
+        r = requests.post('http://localhost:19546/ping', data=post_data)
+        self.assertEqual(r.text, json.dumps(post_data))
