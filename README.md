@@ -9,4 +9,6 @@ Clone this repository onto your machine and `cd` into it via the command line. R
 ## Testing
 Application is being written and tested on Ubuntu 18.04 with the Python 3.6.5 interpreter that comes pre-installed.
 
-Unit tests are currently written to run each time the application is started. In the future, the application will be able to either run the tests or run the application.
+Tests are located in the `tests` directory and are separated into three files. The helpers tests are for functions defined in the `src/helpers.py` file. The server tests are for functions that are used on the server side to compute values. The client tests are for requests that a client would run to alter the state of the application.
+
+To run this application's tests, run the application with the `--test` flag like so: `python3 main.py --test`. All tests will run and then the application will shut down.
