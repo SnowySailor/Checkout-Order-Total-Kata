@@ -8,7 +8,7 @@ def is_in_list(l, v):
 
 def get_value(d, key, default = None):
     if key not in d:
-        return None
+        return default
     return d[key]
 
 def set_response(handler, status_code, content, content_type = 'application/json'):
