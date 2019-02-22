@@ -6,3 +6,8 @@ class ClientTests(unittest.TestCase):
         r = requests.get('http://localhost:19546/ping')
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.text, 'pong')
+
+    def test_data_store_when_given_data_returns_200(self):
+        post_data = {'key': 'key123', 'value': 'value456'}
+        r = requests.post('http://localhost:19546/datastore')
+        self.assertEqual(r.status_code, 200)

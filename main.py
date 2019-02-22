@@ -8,11 +8,16 @@ import sys
 import time
 
 def main():
+    # Check to see if the caller wants to run tests
+    is_testing_mode = False
+    if is_in_list(sys.argv, '--test'):
+        is_testing_mode = True
+
     # Must start the server before we can run any tests
-    run_server()
+    run_server(is_testing_mode)
 
     # Run tests and exit application if desired
-    if is_in_list(sys.argv, '--test'):
+    if is_testing_mode:
         run_tests()
         sys.exit()
 
