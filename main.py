@@ -1,26 +1,20 @@
 # For testing
-import unittest
-from tests.servertests  import ServerTests
-from tests.clienttests  import ClientTests
-from tests.helperstests import HelpersTests
+from tests.runner import run_tests
+
+# For app
+from src.helpers import is_in_list
+from src.server import run_server
+import sys
 
 def main():
     # Must start the server before we can run any tests
     run_server()
-    # TODO: Only run tests if requested
-    run_tests()
+    # Run tests and exit application if desired
+    if is_in_list(sys.argv, '--test'):
+        run_tests()
+        sys.exit()
 
-def run_server():
-    pass
-
-def run_tests():
-    test_classes = [ServerTests, ClientTests, HelpersTests]
-    suite  = unittest.TestSuite()
-    loader = unittest.TestLoader()
-    for test_class in test_classes:
-        tests = loader.loadTestsFromTestCase(test_class)
-        suite.addTests(tests)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    print('Running...')
 
 if __name__ == '__main__':
     main()
