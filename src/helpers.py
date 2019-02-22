@@ -35,3 +35,6 @@ def parse_post_vars(self):
         post_vars[key.decode('utf-8')] = value.decode('utf-8')
 
     return post_vars
+
+def get_path_id(path):
+    return ''

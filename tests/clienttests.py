@@ -29,4 +29,11 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/datastore/doesnotexist')
             self.assertEqual(r.text, 'null')
 
+        def test_get_data_store_when_key_does_exist_returns_value_associated_with_key(self):
+            post_data = {'key': 'testingkey', 'value': 'testingvalue'}
+            r = requests.post(baseurl + '/datastore', data=post_data)
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/datastore/testingkey')
+            self.assertEqual(r.text, 'testingvalue')
+
     return ClientTests

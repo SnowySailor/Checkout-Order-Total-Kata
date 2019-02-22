@@ -3,7 +3,7 @@ import src.helpers as H
 import requests
 import json
 
-def MakeHelpersTests(basepath):
+def MakeHelpersTests(baseurl):
     class HelpersTests(unittest.TestCase):
         # is_in_list
         def test_is_in_list_when_in_list_return_true(self):
@@ -32,27 +32,27 @@ def MakeHelpersTests(basepath):
 
         # parse_post_vars
         def test_parse_post_vars_when_post_to_ping_with_no_data_get_back_no_data(self):
-            r = requests.post('http://localhost:19546/ping')
+            r = requests.post(baseurl + '/ping')
             self.assertEqual(r.text, '{}')
 
         def test_parse_post_vars_when_post_to_ping_with_data_get_back_same_data(self):
             post_data = {'test': 'ing'}
-            r = requests.post('http://localhost:19546/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=post_data)
             self.assertEqual(r.text, json.dumps(post_data))
 
         def test_parse_post_vars_when_post_to_ping_with_empty_data_get_back_empty_data(self):
             post_data = {}
-            r = requests.post('http://localhost:19546/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=post_data)
             self.assertEqual(r.text, json.dumps(post_data))
 
         def test_parse_post_vars_when_post_to_ping_with_multiple_value_for_same_key_get_back_last_value(self):
             post_data = {'test': 'ing', 'test': '123'}
-            r = requests.post('http://localhost:19546/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=post_data)
             self.assertEqual(r.text, json.dumps({'test': '123'}))
 
         def test_parse_post_vars_when_post_to_ping_with_multiple_keys_and_values_get_back_same_data(self):
             post_data = {'test': 'ing', 'ing': 'test'}
-            r = requests.post('http://localhost:19546/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=post_data)
             self.assertEqual(r.text, json.dumps(post_data))
 
         # get_value
@@ -79,5 +79,10 @@ def MakeHelpersTests(basepath):
         def test_get_value_when_key_is_in_dict_dont_return_default_if_set(self):
             d = {'test': 'entry'}
             self.assertNotEqual(H.get_value(d, 'test', 123), 123)
+
+        # get_path_id
+        def test_get_path_id_when_path_is_empty_return_empty_string(self):
+            p = ''
+            self.assertEqual(H.get_path_id(p), '')
 
     return HelpersTests

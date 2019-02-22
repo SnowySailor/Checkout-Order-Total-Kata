@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 import json
 
-from src.helpers import set_response, parse_post_vars, get_value
+from src.helpers import set_response, parse_post_vars, get_value, get_path_id
 
 def MakeRequestHandler(is_testing_mode):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -31,6 +31,7 @@ def MakeRequestHandler(is_testing_mode):
             set_response(self, 200, 'pong', 'text/text')
 
         def do_get_data_store(self):
+            data_id = get_path_id(self.path)
             set_response(self, 200, 'null', 'application/json')
 
 
