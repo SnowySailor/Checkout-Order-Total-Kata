@@ -51,3 +51,7 @@ class HelpersTests(unittest.TestCase):
         post_data = {'test': 'ing', 'ing': 'test'}
         r = requests.post('http://localhost:19546/ping', data=post_data)
         self.assertEqual(r.text, json.dumps(post_data))
+
+    def test_get_value_when_dict_is_empty_return_none(self):
+        d = {}
+        self.assertEqual(H.get_value(d, 'key'), None)

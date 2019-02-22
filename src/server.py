@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 import json
 
-from src.helpers import set_response, parse_post_vars
+from src.helpers import set_response, parse_post_vars, get_value
 
 def MakeRequestHandler(is_testing_mode):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -30,7 +30,11 @@ def MakeRequestHandler(is_testing_mode):
             set_response(self, 200, json_resp, 'application/json')
 
         def do_post_data_store(self):
-            set_response(self, 200, '', 'application/json')
+            post_vars = parse_post_vars(self)
+            if get_value(post_vars, 'key') is None:
+                set_response(self, 400, 'Must provide "key"', 'text/text')
+            else:
+                set_response(self, 200, '', 'application/json')
 
     return RequestHandler
 
