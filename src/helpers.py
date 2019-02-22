@@ -37,5 +37,7 @@ def parse_post_vars(self):
     return post_vars
 
 def get_path_id(path):
+    if path is None:
+        return ''
     path_list = path.split('/')
     return path_list[-1]

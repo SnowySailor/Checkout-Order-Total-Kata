@@ -97,4 +97,8 @@ def MakeHelpersTests(baseurl):
             p = '/test/1/2/'
             self.assertEqual(H.get_path_id(p), '')
 
+        def test_get_path_id_when_path_is_none_empty_string(self):
+            p = None
+            self.assertEqual(H.get_path_id(p), '')
+
     return HelpersTests
