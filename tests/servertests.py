@@ -1,4 +1,7 @@
 import unittest
 
-class ServerTests(unittest.TestCase):
-    pass
+def MakeServerTests(baseurl):
+    class ServerTests(unittest.TestCase):
+        pass
+
+    return ServerTests
