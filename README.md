@@ -1,6 +1,5 @@
 # Checkout Order Total Kata
 
-----
 ## Requirements
 - Python 3.6
 
