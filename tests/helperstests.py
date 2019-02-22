@@ -89,4 +89,8 @@ def MakeHelpersTests(baseurl):
             p = '/test'
             self.assertEqual(H.get_path_id(p), 'test')
 
+        def test_get_path_id_when_path_has_multiple_words_return_last(self):
+            p = '/test/1/2'
+            self.assertEqual(H.get_path_id(p), '2')
+
     return HelpersTests
