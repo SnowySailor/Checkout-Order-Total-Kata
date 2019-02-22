@@ -8,3 +8,6 @@ def set_response(handler, status_code, content, content_type = 'application/json
     handler.send_header('Content-Type', content_type)
     handler.end_headers()
     handler.wfile.write(content.encode('utf-8'))
+
+def parse_post_vars(self):
+    return {}

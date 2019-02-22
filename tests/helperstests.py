@@ -1,5 +1,7 @@
 import unittest
 import src.helpers as H
+import requests
+import json
 
 class HelpersTests(unittest.TestCase):
     def test_is_in_list_when_in_list_return_true(self):
@@ -25,3 +27,7 @@ class HelpersTests(unittest.TestCase):
     def test_is_in_list_when_first_argument_is_not_like_a_list_exception_is_thrown(self):
         l = 123
         self.assertRaises(TypeError, H.is_in_list, l, 123)
+
+    def test_parse_post_vars_when_post_to_ping_with_no_data_get_back_no_data(self):
+        r = requests.post('http://localhost:19546/ping')
+        self.assertEqual(r.text, '{}')
