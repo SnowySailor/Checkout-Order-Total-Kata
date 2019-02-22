@@ -85,4 +85,8 @@ def MakeHelpersTests(baseurl):
             p = ''
             self.assertEqual(H.get_path_id(p), '')
 
+        def test_get_path_id_when_id_is_single_word_return_word(self):
+            p = '/test'
+            self.assertEqual(H.get_path_id(p), 'test')
+
     return HelpersTests
