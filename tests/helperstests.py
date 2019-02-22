@@ -55,3 +55,7 @@ class HelpersTests(unittest.TestCase):
     def test_get_value_when_dict_is_empty_return_none(self):
         d = {}
         self.assertEqual(H.get_value(d, 'key'), None)
+
+    def test_get_value_when_key_not_in_dict_return_none(self):
+        d = {'test': 'value'}
+        self.assertEqual(H.get_value(d, 'key'), None)
