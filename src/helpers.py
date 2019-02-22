@@ -7,7 +7,9 @@ def is_in_list(l, v):
     return v in l
 
 def get_value(d, key, default = None):
-    return None
+    if key not in d:
+        return None
+    return d[key]
 
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)
