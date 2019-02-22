@@ -34,6 +34,6 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/datastore', data=post_data)
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/datastore/testingkey')
-            self.assertEqual(r.text, 'testingvalue')
+            self.assertEqual(r.text, '"testingvalue"')
 
     return ClientTests

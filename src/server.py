@@ -3,8 +3,9 @@ import threading
 import json
 
 from src.helpers import set_response, parse_post_vars, get_value, get_path_id
+from src.database import DataStore
 
-def MakeRequestHandler(is_testing_mode):
+def MakeRequestHandler(is_testing_mode, datastore):
     class RequestHandler(BaseHTTPRequestHandler):
         def log_message(self, format, *args):
             # Just return so the http server doesn't dump logs for each request
@@ -32,7 +33,8 @@ def MakeRequestHandler(is_testing_mode):
 
         def do_get_data_store(self):
             data_id = get_path_id(self.path)
-            set_response(self, 200, 'null', 'application/json')
+            value = datastore.get(data_id)
+            set_response(self, 200, json.dumps(value), 'application/json')
 
 
         # HTTP POST handlers
@@ -44,17 +46,22 @@ def MakeRequestHandler(is_testing_mode):
 
         def do_post_data_store(self):
             post_vars = parse_post_vars(self)
-            if get_value(post_vars, 'key') is None:
+            key       = get_value(post_vars, 'key')
+            value     = get_value(post_vars, 'value')
+
+            if key is None:
                 set_response(self, 400, 'Must provide "key"', 'text/text')
-            elif get_value(post_vars, 'value') is None:
+            elif value is None:
                 set_response(self, 400, 'Must provide "value"', 'text/text')
             else:
+                datastore.set(key, value)
                 set_response(self, 200, '', 'application/json')
 
     return RequestHandler
 
 def run_server(is_testing_mode):
-    server = HTTPServer(('', 19546), MakeRequestHandler(is_testing_mode))
+    datastore = DataStore()
+    server = HTTPServer(('', 19546), MakeRequestHandler(is_testing_mode, datastore))
     thread = threading.Thread(target=server.serve_forever)
     thread.daemon = True
     thread.start()
