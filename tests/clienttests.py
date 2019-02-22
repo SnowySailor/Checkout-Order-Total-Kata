@@ -44,4 +44,15 @@ def MakeClientTests(baseurl):
             r = requests.delete(baseurl + '/datastore/doesnotexist')
             self.assertEqual(r.status_code, 200)
 
+        def test_delete_data_store_when_key_exists_it_is_deleted(self):
+            post_data = {'key': 'testingkey123', 'value': 'testingvalue123'}
+            r = requests.post(baseurl + '/datastore', data=post_data)
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/datastore/testingkey123')
+            self.assertEqual(r.text, '"testingvalue123"')
+            r = requests.delete(baseurl + '/datastore/testingkey123')
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/datastore/testingkey123')
+            self.assertEqual(r.text, 'null')
+
     return ClientTests

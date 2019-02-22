@@ -66,6 +66,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         # HTTP DELETE handlers
         def do_delete_data_store(self):
+            data_id = get_path_id(self.path)
+            datastore.delete(data_id)
             set_response(self, 200, '')
 
     return RequestHandler

@@ -11,3 +11,7 @@ class DataStore:
 
     def get(self, k, default = None):
         return get_value(self.database, k, default)
+
+    def delete(self, k):
+        if get_value(self.database, k) is not None:
+            del self.database[k]
