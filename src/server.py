@@ -14,7 +14,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_GET(self):
             if self.path == '/ping':
                 self.do_get_ping()
-            elif self.path.startswith('/datastore'):
+            elif self.path.startswith('/datastore/') and is_testing_mode:
                 self.do_get_data_store()
             else:
                 set_response(self, 404, '404', 'text/html')

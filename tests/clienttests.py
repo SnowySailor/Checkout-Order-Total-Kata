@@ -25,6 +25,10 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/datastore', data=post_data)
             self.assertEqual(r.status_code, 400)
 
+        def test_get_data_store_when_endpoint_is_datastore1_returns_404(self):
+            r = requests.get(baseurl + '/datastore1/test')
+            self.assertEqual(r.status_code, 404)
+
         def test_get_data_store_when_key_doesnt_exist_returns_null(self):
             r = requests.get(baseurl + '/datastore/doesnotexist')
             self.assertEqual(r.text, 'null')
