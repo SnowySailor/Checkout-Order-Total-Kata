@@ -93,4 +93,8 @@ def MakeHelpersTests(baseurl):
             p = '/test/1/2'
             self.assertEqual(H.get_path_id(p), '2')
 
+        def test_get_path_id_when_path_ends_in_slash_return_empty_string(self):
+            p = '/test/1/2/'
+            self.assertEqual(H.get_path_id(p), '')
+
     return HelpersTests
