@@ -71,3 +71,7 @@ class HelpersTests(unittest.TestCase):
     def test_get_value_when_value_is_list_returns_the_list(self):
         d = {'test': ['value', 'list', 123]}
         self.assertEqual(H.get_value(d, 'test'), ['value', 'list', 123])
+
+    def test_get_value_when_key_is_in_dict_dont_return_default_if_set(self):
+        d = {'test': 'entry'}
+        self.assertNotEqual(H.get_value(d, 'test', 123), 123)
