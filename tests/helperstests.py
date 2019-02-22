@@ -46,3 +46,8 @@ class HelpersTests(unittest.TestCase):
         post_data = {'test': 'ing', 'test': '123'}
         r = requests.post('http://localhost:19546/ping', data=post_data)
         self.assertEqual(r.text, json.dumps({'test': '123'}))
+
+    def test_parse_post_vars_when_post_to_ping_with_multiple_keys_and_values_get_back_same_data(self):
+        post_data = {'test': 'ing', 'ing': 'test'}
+        r = requests.post('http://localhost:19546/ping', data=post_data)
+        self.assertEqual(r.text, json.dumps(post_data))
