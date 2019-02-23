@@ -113,7 +113,11 @@ def MakeRequestHandler(is_testing_mode, datastore):
             if order_id is None:
                 set_response(self, 400, 'Must provide id.', 'text/text')
             else:
-                set_response(self, 200, '')
+                if datastore.get('orders:' + order_id) is None:
+                    datastore.set('orders:' + order_id, list())
+                    set_response(self, 200, '')
+                else:
+                    set_response(self, 400, 'Order with that id already exists.', 'text/text')
 
 
         # HTTP DELETE handlers

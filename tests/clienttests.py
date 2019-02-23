@@ -144,4 +144,12 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=post_data)
             self.assertEqual(r.status_code, 400)
 
+        def test_post_create_order_when_order_exists_returns_400(self):
+            first_order = {'id': 123}
+            second_order = {'id': 123}
+            r = requests.post(baseurl + '/createorder', data=first_order)
+            self.assertEqual(r.status_code, 200)
+            r = requests.post(baseurl + '/createorder', data=second_order)
+            self.assertEqual(r.status_code, 400)
+
     return ClientTests
