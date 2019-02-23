@@ -2,8 +2,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 import json
 
-from src.helpers import set_response, parse_post_vars, get_value, get_path_id
+from src.helpers import set_response, parse_post_vars, get_value, get_path_id, get_raw_post_data, parse_url_query
 from src.database import DataStore
+from src.models.item import Item
 
 def MakeRequestHandler(is_testing_mode, datastore):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -47,7 +48,11 @@ def MakeRequestHandler(is_testing_mode, datastore):
             set_response(self, 200, json.dumps(value))
 
         def do_get_item_details(self):
-            set_response(self, 200, '')
+            url_query = parse_url_query(self.path)
+            print(url_query)
+            name = get_value(url_query, 'name')
+            item = datastore.get('itemdetails:' + name)
+            set_response(self, 200, item.to_json())
 
 
         # HTTP POST handlers
@@ -63,14 +68,17 @@ def MakeRequestHandler(is_testing_mode, datastore):
             value     = get_value(post_vars, 'value')
 
             if key is None:
-                set_response(self, 400, 'Must provide "key"', 'text/text')
+                set_response(self, 400, 'Must provide key', 'text/text')
             elif value is None:
-                set_response(self, 400, 'Must provide "value"', 'text/text')
+                set_response(self, 400, 'Must provide value', 'text/text')
             else:
                 datastore.set(key, value)
                 set_response(self, 200, '')
 
         def do_post_create_item(self):
+            item_json = get_raw_post_data(self)
+            item = Item(item_json)
+            datastore.set('itemdetails:' + item.name, item)
             set_response(self, 200, '')
 
 

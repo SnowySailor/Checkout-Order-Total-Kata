@@ -1,5 +1,6 @@
 import unittest
 import requests
+import json
 
 def MakeClientTests(baseurl):
     class ClientTests(unittest.TestCase):
@@ -58,7 +59,7 @@ def MakeClientTests(baseurl):
         # createitem
         def test_post_create_item_when_given_valid_data_returns_200(self):
             post_data = {'name': 'cherries', 'price': '1.00', 'billing_method': 'weight'}
-            r = requests.post(baseurl + '/createitem', data=post_data)
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
         def test_get_create_item_returns_404(self):
@@ -67,7 +68,17 @@ def MakeClientTests(baseurl):
 
         # itemdetails
         def test_get_item_details_when_given_item_name_returns_200(self):
-            r = requests.get(baseurl + '/itemdetails?name=cherries')
+            post_data = {'name': 'milk', 'price': '1.50', 'billing_method': 'unit'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=milk')
+            self.assertEqual(r.status_code, 200)
+
+        def test_get_item_details_when_given_item_name_returns_item_details_json(self):
+            post_data = {'name': 'milk', 'price': '1.50', 'billing_method': 'unit'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=milk')
+            self.assertEqual(r.text, json.dumps(post_data))
 
     return ClientTests

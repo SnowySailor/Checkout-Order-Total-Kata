@@ -1,5 +1,5 @@
 from cgi import parse_header, parse_multipart
-from urllib.parse import parse_qsl
+from urllib.parse import parse_qsl, urlparse
 
 def is_in_list(l, v):
     if l is None:
@@ -35,6 +35,14 @@ def parse_post_vars(self):
         post_vars[key.decode('utf-8')] = value.decode('utf-8')
 
     return post_vars
+
+def get_raw_post_data(self):
+    length = int(self.headers['content-length'])
+    return self.rfile.read(length)
+
+def parse_url_query(path):
+    query = urlparse(path).query
+    return dict(parse_qsl(query))
 
 def get_path_id(path):
     if path is None:
