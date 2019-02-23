@@ -132,4 +132,11 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails?name=doesnotexist')
             self.assertEqual(r.status_code, 400)
 
+
+        # createorder
+        def test_post_create_order_when_given_valid_data_returns_200(self):
+            post_data = {'id': 123456}
+            r = requests.post(baseurl + '/createorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+
     return ClientTests
