@@ -52,13 +52,17 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_get_item_details(self):
             url_query = parse_url_query(self.path)
             name = get_value(url_query, 'name')
+            # Ensure that the client provided a name to look up
             if name is None or name == '':
                 set_response(self, 400, 'Must provide name.', 'text/text')
             else:
                 item = datastore.get('itemdetails:' + name, None)
                 if item is not None:
+                    # Return the item to the user as json
                     set_response(self, 200, item.to_json())
                 else:
+                    # If the name isn't a name from an item, tell the client there
+                    # was a problem
                     set_response(self, 400, 'Item does not exist.', 'text/text')
 
 
@@ -86,14 +90,17 @@ def MakeRequestHandler(is_testing_mode, datastore):
             item_json = get_raw_post_data(self)
             item_dict = json.loads(item_json)
 
+            # Pull out all of the fields we need
             name           = get_value(item_dict, 'name')
             price          = get_value(item_dict, 'price', 0)
             billing_method = get_value(item_dict, 'billing_method', '')
             if billing_method.lower() == 'weight':
                 billing_method = Methods.WEIGHT
             else:
+                # Default to price per item scanned
                 billing_method = Methods.UNIT
 
+            # Ensure that all necessary data is present
             msg = ''
             if name is None or name == '':
                 msg += 'Must provide name. '
@@ -103,6 +110,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
+                # Create and storet the item and tell the user everything is fine
                 item = Item(name, price, billing_method)
                 datastore.set('itemdetails:' + item.name, item)
                 set_response(self, 200, '')
@@ -110,10 +118,15 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_post_create_order(self):
             post_vars = parse_post_vars(self)
             order_id = get_value(post_vars, 'id')
+            # Ensure the client provided an id to create
             if order_id is None:
                 set_response(self, 400, 'Must provide id.', 'text/text')
             else:
+                # If the order already exists, we don't want to overwrite it
+                # Instead, tell the user that there was a problem
                 if datastore.get('orders:' + order_id) is None:
+                    # Store the value as a list for now because it will eventually
+                    # be a list of items scanned
                     datastore.set('orders:' + order_id, list())
                     set_response(self, 200, '')
                 else:

@@ -17,8 +17,9 @@ class Item:
         self.billing_method = billing_method
 
     def to_json(self):
+        # Push all item values into a dict and dump it as json
         d = dict()
-        d['name'] = self.name
-        d['price'] = self.price
+        d['name']           = self.name
+        d['price']          = self.price
         d['billing_method'] = self.billing_method.value
         return json.dumps(d)

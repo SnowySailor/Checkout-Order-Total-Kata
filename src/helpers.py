@@ -46,5 +46,7 @@ def parse_url_query(path):
 def get_path_id(path):
     if path is None:
         return ''
+    # Want to get the last value in the path
+    # We want 'three' if the path is /one/two/three
     path_list = path.split('/')
     return path_list[-1]
