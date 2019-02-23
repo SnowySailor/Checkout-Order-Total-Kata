@@ -61,4 +61,8 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/createitem', data=post_data)
             self.assertEqual(r.status_code, 200)
 
+        def test_get_create_item_returns_404(self):
+            r = requests.get(baseurl + '/createitem')
+            self.assertEqual(r.status_code, 404)
+
     return ClientTests
