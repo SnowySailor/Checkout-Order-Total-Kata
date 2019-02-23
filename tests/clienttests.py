@@ -115,4 +115,8 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails')
             self.assertEqual(r.status_code, 400)
 
+        def test_get_item_details_when_item_does_not_exist_return_400(self):
+            r = requests.get(baseurl + '/itemdetails?name=doesnotexist')
+            self.assertEqual(r.status_code, 400)
+
     return ClientTests

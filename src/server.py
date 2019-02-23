@@ -54,7 +54,10 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 400, 'Must provide name.', 'text/text')
             else:
                 item = datastore.get('itemdetails:' + name, None)
-                set_response(self, 200, item.to_json())
+                if item is not None:
+                    set_response(self, 200, item.to_json())
+                else:
+                    set_response(self, 400, 'Item does not exist.', 'text/text')
 
 
         # HTTP POST handlers
