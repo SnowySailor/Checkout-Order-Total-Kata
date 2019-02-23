@@ -139,4 +139,9 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=post_data)
             self.assertEqual(r.status_code, 200)
 
+        def test_post_create_order_when_not_given_id_returns_400(self):
+            post_data = {}
+            r = requests.post(baseurl + '/createorder', data=post_data)
+            self.assertEqual(r.status_code, 400)
+
     return ClientTests
