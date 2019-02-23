@@ -5,6 +5,19 @@ from src.helpers import get_value
 
 def MakeClientTests(baseurl):
     class ClientTests(unittest.TestCase):
+        # Webserver tests
+        def test_when_http_get_to_undefined_route_returns_404(self):
+            r = requests.get(baseurl + '/doesnotexist/')
+            self.assertEqual(r.status_code, 404)
+
+        def test_when_http_post_to_undefined_route_returns_404(self):
+            r = requests.post(baseurl + '/doesnotexist/')
+            self.assertEqual(r.status_code, 404)
+
+        def test_when_http_delete_to_undefined_route_returns_404(self):
+            r = requests.delete(baseurl + '/doesnotexist/')
+            self.assertEqual(r.status_code, 404)
+
         # ping
         def test_when_request_sent_to_ping_get_back_pong_and_200(self):
             r = requests.get('http://localhost:19546/ping')

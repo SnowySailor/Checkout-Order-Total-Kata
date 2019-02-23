@@ -21,13 +21,12 @@ def parse_post_vars(self):
     if self.headers['content-type'] is None:
         return dict()
 
+    encoded_vars = dict()
     content_type, param_dict = parse_header(self.headers['content-type'])
     if content_type == 'application/x-www-form-urlencoded':
         # Parse url-encoded params
         length = int(self.headers['content-length'])
         encoded_vars = dict(parse_qsl(self.rfile.read(length), keep_blank_values=1, encoding='utf-8'))
-    else:
-        encoded_vars = dict()
 
     # Decode each key-value pair
     post_vars = dict()
