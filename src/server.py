@@ -24,6 +24,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_post_ping()
             elif self.path == '/datastore' and is_testing_mode: # Route only available for testing mode
                 self.do_post_data_store()
+            elif self.path == '/createitem':
+                self.do_post_create_item()
             else:
                 set_response(self, 404, '404', 'text/html')
 
@@ -62,6 +64,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
             else:
                 datastore.set(key, value)
                 set_response(self, 200, '')
+
+        def do_post_create_item(self):
+            set_response(self, 200, '')
 
 
         # HTTP DELETE handlers

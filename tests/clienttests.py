@@ -9,7 +9,7 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, 'pong')
 
-        # datastore
+        # datastore (in-memory database)
         def test_post_data_store_when_given_valid_data_returns_200(self):
             post_data = {'key': 'key123', 'value': 'value456'}
             r = requests.post(baseurl + '/datastore', data=post_data)
@@ -54,5 +54,11 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/datastore/testingkey123')
             self.assertEqual(r.text, 'null')
+
+        # createitem
+        def test_post_create_item_when_given_valid_data_returns_200(self):
+            post_data = {'name': 'cherries', 'price': '1.00', 'billing_method': 'weight'}
+            r = requests.post(baseurl + '/createitem', data=post_data)
+            self.assertEqual(r.status_code, 200)
 
     return ClientTests
