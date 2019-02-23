@@ -4,7 +4,7 @@ import json
 
 from src.helpers import set_response, parse_post_vars, get_value, get_path_id, get_raw_post_data, parse_url_query
 from src.database import DataStore
-from src.models.item import Item
+from src.models.item import Item, Methods
 
 def MakeRequestHandler(is_testing_mode, datastore):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -49,7 +49,6 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         def do_get_item_details(self):
             url_query = parse_url_query(self.path)
-            print(url_query)
             name = get_value(url_query, 'name')
             item = datastore.get('itemdetails:' + name)
             set_response(self, 200, item.to_json())
@@ -77,9 +76,28 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         def do_post_create_item(self):
             item_json = get_raw_post_data(self)
-            item = Item(item_json)
-            datastore.set('itemdetails:' + item.name, item)
-            set_response(self, 200, '')
+            item_dict = json.loads(item_json)
+
+            name           = get_value(item_dict, 'name')
+            price          = get_value(item_dict, 'price', 0)
+            billing_method = get_value(item_dict, 'billing_method', '')
+            if billing_method.lower() == 'weight':
+                billing_method = Methods.WEIGHT
+            else:
+                billing_method = Methods.UNIT
+
+            msg = ''
+            if name is None or name == '':
+                msg += 'Must provide name. '
+            if price <= 0:
+                msg += 'Must provide price. '
+
+            if msg != '':
+                set_response(self, 400, msg, 'text/text')
+            else:
+                item = Item(name, price, billing_method)
+                datastore.set('itemdetails:' + item.name, item)
+                set_response(self, 200, '')
 
 
         # HTTP DELETE handlers

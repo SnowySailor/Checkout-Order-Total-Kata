@@ -1,6 +1,7 @@
 import unittest
 import requests
 import json
+from src.helpers import get_value
 
 def MakeClientTests(baseurl):
     class ClientTests(unittest.TestCase):
@@ -58,9 +59,27 @@ def MakeClientTests(baseurl):
 
         # createitem
         def test_post_create_item_when_given_valid_data_returns_200(self):
-            post_data = {'name': 'cherries', 'price': '1.00', 'billing_method': 'weight'}
+            post_data = {'name': 'cherries', 'price': 1.00, 'billing_method': 'weight'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
+
+        def test_post_create_item_when_given_no_name_returns_400(self):
+            post_data = {'price': 1.00, 'billing_method': 'weight'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            self.assertEqual(r.status_code, 400)
+
+        def test_post_create_item_when_given_no_price_returns_400(self):
+            post_data = {'name': 'cherries', 'billing_method': 'weight'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            self.assertEqual(r.status_code, 400)
+
+        def test_post_create_item_when_given_no_billing_method_defaults_to_unit(self):
+            post_data = {'name': 'cherries', 'price': 1.00}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=cherries')
+            item = json.loads(r.text)
+            self.assertEqual(get_value(item, 'billing_method'), 'unit')
 
         def test_get_create_item_returns_404(self):
             r = requests.get(baseurl + '/createitem')
@@ -68,14 +87,14 @@ def MakeClientTests(baseurl):
 
         # itemdetails
         def test_get_item_details_when_given_item_name_returns_200(self):
-            post_data = {'name': 'milk', 'price': '1.50', 'billing_method': 'unit'}
+            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=milk')
             self.assertEqual(r.status_code, 200)
 
         def test_get_item_details_when_given_item_name_returns_item_details_json(self):
-            post_data = {'name': 'milk', 'price': '1.50', 'billing_method': 'unit'}
+            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=milk')
