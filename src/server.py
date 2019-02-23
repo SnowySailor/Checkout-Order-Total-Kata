@@ -31,6 +31,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_post_create_item()
             elif self.path == '/createorder':
                 self.do_post_create_order()
+            elif self.path == '/additemtoorder':
+                self.do_post_add_item_to_order()
             else:
                 set_response(self, 404, '404', 'text/html')
 
@@ -131,6 +133,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 200, '')
                 else:
                     set_response(self, 400, 'Order with that id already exists.', 'text/text')
+
+        def do_post_add_item_to_order(self):
+            set_response(self, 200, '')
 
 
         # HTTP DELETE handlers

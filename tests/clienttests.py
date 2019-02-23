@@ -152,4 +152,10 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=second_order)
             self.assertEqual(r.status_code, 400)
 
+        # additemtoorder
+        def test_post_add_item_to_order_when_given_item_and_order_returns_200(self):
+            post_data = {'order_id': 123, 'item': 'cherries'}
+            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+
     return ClientTests
