@@ -111,4 +111,8 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails?name=milk')
             self.assertEqual(r.text, json.dumps(post_data))
 
+        def test_get_item_details_when_given_no_name_returns_400(self):
+            r = requests.get(baseurl + '/itemdetails')
+            self.assertEqual(r.status_code, 400)
+
     return ClientTests

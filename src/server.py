@@ -50,8 +50,11 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_get_item_details(self):
             url_query = parse_url_query(self.path)
             name = get_value(url_query, 'name')
-            item = datastore.get('itemdetails:' + name)
-            set_response(self, 200, item.to_json())
+            if name is None or name == '':
+                set_response(self, 400, 'Must provide name.', 'text/text')
+            else:
+                item = datastore.get('itemdetails:' + name, None)
+                set_response(self, 200, item.to_json())
 
 
         # HTTP POST handlers
