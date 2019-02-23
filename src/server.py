@@ -16,6 +16,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_get_ping()
             elif self.path.startswith('/datastore/') and is_testing_mode:
                 self.do_get_data_store()
+            elif self.path.startswith('/itemdetails'):
+                self.do_get_item_details()
             else:
                 set_response(self, 404, '404', 'text/html')
 
@@ -43,6 +45,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
             data_id = get_path_id(self.path)
             value = datastore.get(data_id)
             set_response(self, 200, json.dumps(value))
+
+        def do_get_item_details(self):
+            set_response(self, 200, '')
 
 
         # HTTP POST handlers

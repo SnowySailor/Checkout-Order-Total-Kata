@@ -65,4 +65,9 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/createitem')
             self.assertEqual(r.status_code, 404)
 
+        # itemdetails
+        def test_get_item_details_when_given_item_name_returns_200(self):
+            r = requests.get(baseurl + '/itemdetails?name=cherries')
+            self.assertEqual(r.status_code, 200)
+
     return ClientTests
