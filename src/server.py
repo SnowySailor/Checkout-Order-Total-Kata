@@ -1,6 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import threading
 import json
+from urllib.parse import urlparse
 
 from src.helpers import set_response, parse_post_vars, get_value, get_path_id, get_raw_post_data, parse_url_query
 from src.database import DataStore
@@ -13,31 +14,36 @@ def MakeRequestHandler(is_testing_mode, datastore):
             return
 
         def do_GET(self):
-            if self.path == '/ping':
+            path = urlparse(self.path).path
+            if path == '/ping':
                 self.do_get_ping()
-            elif self.path.startswith('/datastore/') and is_testing_mode:
+            elif path.startswith('/datastore/') and is_testing_mode:
                 self.do_get_data_store()
-            elif self.path.startswith('/itemdetails'):
+            elif path == '/itemdetails':
                 self.do_get_item_details()
+            elif path.startswith('/getorder/'):
+                self.do_get_order()
             else:
                 set_response(self, 404, '404', 'text/html')
 
         def do_POST(self):
-            if self.path == '/ping':
+            path = urlparse(self.path).path
+            if path == '/ping':
                 self.do_post_ping()
-            elif self.path == '/datastore' and is_testing_mode: # Route only available for testing mode
+            elif path == '/datastore' and is_testing_mode: # Route only available for testing mode
                 self.do_post_data_store()
-            elif self.path == '/createitem':
+            elif path == '/createitem':
                 self.do_post_create_item()
-            elif self.path == '/createorder':
+            elif path == '/createorder':
                 self.do_post_create_order()
-            elif self.path == '/additemtoorder':
+            elif path == '/additemtoorder':
                 self.do_post_add_item_to_order()
             else:
                 set_response(self, 404, '404', 'text/html')
 
         def do_DELETE(self):
-            if self.path.startswith('/datastore/') and is_testing_mode: # Route only available for testing mode
+            path = urlparse(self.path).path
+            if path.startswith('/datastore/') and is_testing_mode: # Route only available for testing mode
                 self.do_delete_data_store()
             else:
                 set_response(self, 404, '404', 'text/html')
@@ -66,6 +72,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     # If the name isn't a name from an item, tell the client there
                     # was a problem
                     set_response(self, 400, 'Item does not exist.', 'text/text')
+
+        def do_get_order(self):
+            set_response(self, 200, '')
 
 
         # HTTP POST handlers
