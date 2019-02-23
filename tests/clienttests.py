@@ -81,6 +81,17 @@ def MakeClientTests(baseurl):
             item = json.loads(r.text)
             self.assertEqual(get_value(item, 'billing_method'), 'unit')
 
+        def test_post_create_item_when_item_already_exists_it_is_overwritten(self):
+            first_item = {'name': 'cherries', 'price': 1.00, 'billing_method': 'weight'}
+            second_item = {'name': 'cherries', 'price': 0.05, 'billing_method': 'unit'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(first_item))
+            self.assertEqual(r.status_code, 200)
+            r = requests.post(baseurl + '/createitem', data=json.dumps(second_item))
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=cherries')
+            item = json.loads(r.text)
+            self.assertEqual(item, second_item)
+
         def test_get_create_item_returns_404(self):
             r = requests.get(baseurl + '/createitem')
             self.assertEqual(r.status_code, 404)
