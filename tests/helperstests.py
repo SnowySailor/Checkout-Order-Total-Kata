@@ -122,8 +122,13 @@ def MakeHelpersTests(baseurl):
             self.assertEqual(H.parse_float('aaa'), -1)
 
         # parse_json
-        def test_parse_json_when_given_json_returns_json_as_dict(self):
+        def test_parse_json_when_given_json_returns_same_json_as_dict(self):
             json_str = "{}"
             self.assertEqual(H.parse_json(json_str), dict())
+
+        # parse_json
+        def test_parse_json_when_given_json_with_data_returns_json_as_dict(self):
+            json_str = '{"test":123}'
+            self.assertEqual(H.parse_json(json_str), {"test":123})
 
     return HelpersTests
