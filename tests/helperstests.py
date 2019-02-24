@@ -111,4 +111,8 @@ def MakeHelpersTests(baseurl):
         def test_parse_int_when_given_string_aaa_returns_default(self):
             self.assertEqual(H.parse_int('aaa'), -1)
 
+        # parse_float
+        def test_parse_float_when_given_string_123_returns_123(self):
+            self.assertEqual(H.parse_float('123'), 123.0)
+
     return HelpersTests

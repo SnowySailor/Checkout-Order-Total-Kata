@@ -19,6 +19,9 @@ def parse_int(val, default = -1):
     except ValueError:
         return default
 
+def parse_float(val, default = -1.0):
+    return float(val)
+
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)
     handler.send_header('Content-Type', content_type)
