@@ -5,6 +5,13 @@ from src.helpers import get_value
 
 def MakeClientTests(baseurl):
     class ClientTests(unittest.TestCase):
+        @classmethod
+        def setUpClass(self):
+            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            post_data = {'name': 'cheese', 'price': 5.75, 'billing_method': 'weight'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+
         # Webserver tests
         def test_when_http_get_to_undefined_route_returns_404(self):
             r = requests.get(baseurl + '/doesnotexist/')
@@ -161,6 +168,14 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/additemtoorder', data=post_data)
             self.assertEqual(r.status_code, 200)
 
+        def test_post_add_item_to_order_when_missing_order_id_returns_400(self):
+            order_data = {'id': 6}
+            r = requests.post(baseurl + '/createorder', data=order_data)
+            self.assertEqual(r.status_code, 200)
+            post_data = {'item': 'cherries', 'amount': 1.56}
+            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            self.assertEqual(r.status_code, 400)
+
         # getorder
         def test_get_get_order_when_given_valid_order_id_returns_200(self):
             post_data = {'id': 4}
@@ -170,10 +185,6 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
 
         def test_get_get_order_when_given_valid_order_id_with_items_returns_200(self):
-            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
-            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
-            self.assertEqual(r.status_code, 200)
-
             post_data = {'id': 5}
             r = requests.post(baseurl + '/createorder', data=post_data)
             self.assertEqual(r.status_code, 200)

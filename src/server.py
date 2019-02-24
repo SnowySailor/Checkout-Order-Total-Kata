@@ -151,11 +151,18 @@ def MakeRequestHandler(is_testing_mode, datastore):
             item_name = get_value(post_vars, 'item')
             amount    = float(get_value(post_vars, 'amount'))
 
-            order = datastore.get('orders:' + str(order_id))
-            item  = datastore.get('itemdetails:' + item_name)
-            order.add_item(item, amount)
+            msg = ''
+            if order_id == -1:
+                msg += 'Must provide order_id. '
 
-            set_response(self, 200, '')
+            if msg != '':
+                set_response(self, 400, msg, 'text/text')
+            else:
+                order = datastore.get('orders:' + str(order_id))
+                item  = datastore.get('itemdetails:' + item_name)
+                order.add_item(item, amount)
+
+                set_response(self, 200, '')
 
 
         # HTTP DELETE handlers
