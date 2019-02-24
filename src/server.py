@@ -7,7 +7,7 @@ from src.helpers import set_response, parse_post_vars, get_value, get_path_id,\
     get_raw_post_data, parse_url_query, parse_int, parse_float
 from src.database import DataStore
 from src.models.item import Item, Methods
-from src.models.order import Order
+from src.models.order import MakeOrder
 
 def MakeRequestHandler(is_testing_mode, datastore):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -148,7 +148,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 # If the order already exists, we don't want to overwrite it
                 # Instead, tell the user that there was a problem
                 if datastore.get('orders:' + order_id) is None:
-                    order = Order(order_id)
+                    order = MakeOrder(order_id, datastore)
                     datastore.set('orders:' + order_id, order)
                     set_response(self, 200, '')
                 else:
@@ -171,12 +171,14 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 order = datastore.get('orders:' + order_id)
                 item  = datastore.get('itemdetails:' + item_name)
 
+                # If the item is a UNIT type, we only want to allow integers
+                # for the amount since it doesn't make sense to have something
+                # like 1.25 cans of soup
                 amount = parse_float(get_value(post_vars, 'amount'), 1.0)
                 if item.billing_method == Methods.UNIT:
                     amount = parse_int(amount)
 
                 order.add_item(item, amount)
-
                 set_response(self, 200, '')
 
         def do_post_remove_item_from_order(self):
@@ -202,6 +204,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 elif get_value(order.items, item_name) is None:
                     set_response(self, 400, 'Order does not contain provided item.', 'text/text')
                 else:
+                    # If the item is a UNIT type, we only want to allow integers
+                    # for the amount since it doesn't make sense to have something
+                    # like 1.25 cans of soup
                     amount = parse_float(get_value(post_vars, 'amount'), 1.0)
                     if item.billing_method == Methods.UNIT:
                         amount = parse_int(amount)

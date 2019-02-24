@@ -197,6 +197,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -215,6 +216,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 37.95
             expected['items'] = [{'name': 'cheese', 'amount': 6.6}]
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -291,6 +293,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 0.00
             expected['items'] = []
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
@@ -309,6 +312,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 6.00
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
@@ -327,6 +331,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 6.00
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk'}
@@ -354,6 +359,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 1.50
             expected['items'] = [{'name': 'milk', 'amount': 1}]
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -370,6 +376,7 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
+            expected['total'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.status_code, 200)
