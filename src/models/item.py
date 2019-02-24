@@ -7,10 +7,6 @@ class Methods(enum.Enum):
     UNIT   = 'unit'
 
 class Item:
-    name           = ''
-    price          = 0
-    billing_method = Methods.UNIT
-
     def __init__(self, name, price, billing_method):
         self.name           = name
         self.price          = price

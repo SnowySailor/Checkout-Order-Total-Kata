@@ -115,4 +115,7 @@ def MakeHelpersTests(baseurl):
         def test_parse_float_when_given_string_123_returns_123(self):
             self.assertEqual(H.parse_float('123'), 123.0)
 
+        def test_parse_float_when_given_none_returns_default(self):
+            self.assertEqual(H.parse_float(None, 123.0), 123.0)
+
     return HelpersTests
