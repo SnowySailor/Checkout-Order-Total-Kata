@@ -24,6 +24,8 @@ def parse_float(val, default = -1.0):
         return float(val)
     except TypeError:
         return default
+    except ValueError:
+        return default
 
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)
