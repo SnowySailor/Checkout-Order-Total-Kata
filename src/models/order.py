@@ -9,7 +9,7 @@ class Order:
 
     def add_item(self, item, added_amount):
         # Get the amount we currently are holding for this order
-        current_amount = get_value(self.items, item, 0)
+        current_amount = get_value(self.items, item.name, 0)
         self.items[item.name] = current_amount + added_amount
 
     def remove_item(self, item, removed_amount):

@@ -158,7 +158,6 @@ def MakeRequestHandler(is_testing_mode, datastore):
             post_vars = parse_post_vars(self)
             order_id  = get_value(post_vars, 'order_id')
             item_name = get_value(post_vars, 'item')
-            amount    = parse_float(get_value(post_vars, 'amount'), 1.0)
 
             msg = ''
             if order_id is None or order_id == '':
@@ -171,6 +170,11 @@ def MakeRequestHandler(is_testing_mode, datastore):
             else:
                 order = datastore.get('orders:' + order_id)
                 item  = datastore.get('itemdetails:' + item_name)
+
+                amount = parse_float(get_value(post_vars, 'amount'), 1.0)
+                if item.billing_method == Methods.UNIT:
+                    amount = parse_int(amount)
+
                 order.add_item(item, amount)
 
                 set_response(self, 200, '')
