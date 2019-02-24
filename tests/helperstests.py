@@ -134,4 +134,8 @@ def MakeHelpersTests(baseurl):
             json_str = '{"test":123'
             self.assertEqual(H.parse_json(json_str), None)
 
+        def test_parse_json_when_given_empty_string_returns_default(self):
+            json_str = ''
+            self.assertEqual(H.parse_json(json_str), None)
+
     return HelpersTests
