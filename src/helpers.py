@@ -16,6 +16,8 @@ def parse_int(val, default = -1):
         return int(val)
     except TypeError:
         return default
+    except ValueError:
+        return default
 
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)

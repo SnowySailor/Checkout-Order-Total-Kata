@@ -108,4 +108,7 @@ def MakeHelpersTests(baseurl):
         def test_parse_int_when_given_none_returns_default(self):
             self.assertEqual(H.parse_int(None, 'test'), 'test')
 
+        def test_parse_int_when_given_string_aaa_returns_default(self):
+            self.assertEqual(H.parse_int('aaa'), -1)
+
     return HelpersTests
