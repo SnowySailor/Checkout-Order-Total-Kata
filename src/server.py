@@ -94,7 +94,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_post_ping(self):
             # Read the post variables and return them to the client
             post_data = get_raw_post_data(self)
-            post_dict = parse_json(post_data)
+            post_dict = parse_json(post_data, dict())
             json_resp = json.dumps(post_dict)
             set_response(self, 200, json_resp)
 

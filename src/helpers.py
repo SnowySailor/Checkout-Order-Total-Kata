@@ -34,24 +34,6 @@ def set_response(handler, status_code, content, content_type = 'application/json
     handler.end_headers()
     handler.wfile.write(content.encode('utf-8'))
 
-def parse_post_vars(self):
-    if self.headers['content-type'] is None:
-        return dict()
-
-    encoded_vars = dict()
-    content_type, param_dict = parse_header(self.headers['content-type'])
-    if content_type == 'application/x-www-form-urlencoded':
-        # Parse url-encoded params
-        length = int(self.headers['content-length'])
-        encoded_vars = dict(parse_qsl(self.rfile.read(length), keep_blank_values=1, encoding='utf-8'))
-
-    # Decode each key-value pair
-    post_vars = dict()
-    for key, value in encoded_vars.items():
-        post_vars[key.decode('utf-8')] = value.decode('utf-8')
-
-    return post_vars
-
 def get_raw_post_data(self):
     length = int(self.headers['content-length'])
     return self.rfile.read(length)
