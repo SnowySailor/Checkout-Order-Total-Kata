@@ -178,10 +178,13 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_post_remove_item_from_order(self):
             post_vars = parse_post_vars(self)
             order_id = get_value(post_vars, 'order_id')
+            item     = get_value(post_vars, 'item')
             
             msg = ''
             if order_id is None or order_id == '':
                 msg += 'Must provide order_id. '
+            if item is None or item == '':
+                msg += 'Must provide item. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
