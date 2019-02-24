@@ -57,7 +57,10 @@ def get_raw_post_data(self):
     return self.rfile.read(length)
 
 def parse_json(json_str, default = None):
-    return json.loads(json_str)
+    try:
+        return json.loads(json_str)
+    except ValueError:
+        return default
 
 def parse_url_query(path):
     query = urlparse(path).query
