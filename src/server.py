@@ -179,6 +179,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             post_vars = parse_post_vars(self)
             order_id  = get_value(post_vars, 'order_id')
             item_name = get_value(post_vars, 'item')
+            amount    = parse_float(get_value(post_vars, 'amount'))
 
             msg = ''
             if order_id is None or order_id == '':
@@ -198,6 +199,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 elif get_value(order.items, item_name) is None:
                     set_response(self, 400, 'Order does not contain provided item.', 'text/text')
                 else:
+                    order.remove_item(item, amount)
                     set_response(self, 200, '')
 
 

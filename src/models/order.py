@@ -12,6 +12,19 @@ class Order:
         current_amount = get_value(self.items, item, 0)
         self.items[item.name] = current_amount + added_amount
 
+    def remove_item(self, item, removed_amount):
+        # Get the amount we currently are holding for this order
+        current_amount = get_value(self.items, item, 0)
+        # Remove the desired amount
+        new_amount = current_amount - removed_amount
+        # It doesn't make sense to have a zero or negative amount of items
+        # so if the value goes negative or is 0, we want to delete the item
+        # from the order
+        if new_amount < 0:
+            del self.items[item.name]
+        else:
+            self.items[item.name] = new_amount
+
     def to_json(self):
         d = dict()
         d['id'] = self.order_id
