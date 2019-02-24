@@ -12,7 +12,10 @@ def get_value(d, key, default = None):
     return d[key]
 
 def parse_int(val, default = -1):
-    return int(val)
+    try:
+        return int(val)
+    except TypeError:
+        return default
 
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)
