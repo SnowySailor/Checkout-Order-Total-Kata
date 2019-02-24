@@ -78,7 +78,10 @@ def MakeRequestHandler(is_testing_mode, datastore):
         def do_get_order(self):
             order_id = get_path_id(self.path)
             order = datastore.get('orders:' + order_id)
-            set_response(self, 200, order.to_json())
+            if order is None:
+                set_response(self, 400, 'Order does not exist.')
+            else:
+                set_response(self, 200, order.to_json())
 
 
         # HTTP POST handlers
