@@ -154,6 +154,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
             msg = ''
             if order_id == -1:
                 msg += 'Must provide order_id. '
+            if item_name is None:
+                msg += 'Must provide item. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
