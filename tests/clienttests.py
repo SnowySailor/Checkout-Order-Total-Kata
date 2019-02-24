@@ -38,17 +38,17 @@ def MakeClientTests(baseurl):
         # datastore (in-memory database)
         def test_post_data_store_when_given_valid_data_returns_200(self):
             post_data = {'key': 'key123', 'value': 'value456'}
-            r = requests.post(baseurl + '/datastore', data=post_data)
+            r = requests.post(baseurl + '/datastore', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
         def test_post_data_store_when_not_given_key_returns_400(self):
             post_data = {'value': 'value456'}
-            r = requests.post(baseurl + '/datastore', data=post_data)
+            r = requests.post(baseurl + '/datastore', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_data_store_when_not_given_value_returns_400(self):
             post_data = {'key': 'key123'}
-            r = requests.post(baseurl + '/datastore', data=post_data)
+            r = requests.post(baseurl + '/datastore', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_get_data_store_when_endpoint_is_datastore1_returns_404(self):
@@ -61,7 +61,7 @@ def MakeClientTests(baseurl):
 
         def test_get_data_store_when_key_does_exist_returns_value_associated_with_key(self):
             post_data = {'key': 'testingkey', 'value': 'testingvalue'}
-            r = requests.post(baseurl + '/datastore', data=post_data)
+            r = requests.post(baseurl + '/datastore', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/datastore/testingkey')
             self.assertEqual(r.text, '"testingvalue"')
@@ -72,7 +72,7 @@ def MakeClientTests(baseurl):
 
         def test_delete_data_store_when_key_exists_it_is_deleted(self):
             post_data = {'key': 'testingkey123', 'value': 'testingvalue123'}
-            r = requests.post(baseurl + '/datastore', data=post_data)
+            r = requests.post(baseurl + '/datastore', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/datastore/testingkey123')
             self.assertEqual(r.text, '"testingvalue123"')
@@ -146,53 +146,53 @@ def MakeClientTests(baseurl):
         # createorder
         def test_post_create_order_when_given_valid_data_returns_200(self):
             post_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=post_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
         def test_post_create_order_when_not_given_id_returns_400(self):
             post_data = {}
-            r = requests.post(baseurl + '/createorder', data=post_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_order_when_order_exists_returns_400(self):
             first_order = {'id': self.order_id}
             second_order = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=first_order)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(first_order))
             self.assertEqual(r.status_code, 200)
-            r = requests.post(baseurl + '/createorder', data=second_order)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(second_order))
             self.assertEqual(r.status_code, 400)
 
         # additemtoorder
         def test_post_add_item_to_order_when_given_item_and_order_returns_200(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
         def test_post_add_item_to_order_when_missing_order_id_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'item': 'cherries', 'amount': 1.56}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_add_item_to_order_when_missing_item_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'amount': 1.56}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_add_item_to_order_when_missing_amount_defaults_to_1(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'cheese'}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -205,13 +205,13 @@ def MakeClientTests(baseurl):
 
         def test_post_add_item_to_order_when_item_added_multiple_times_amounts_add(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'cheese', 'amount': 1.0}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'cheese', 'amount': 5.6}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -225,70 +225,70 @@ def MakeClientTests(baseurl):
         # removeitemfromorder
         def test_post_remove_item_from_order_when_given_item_and_order_returns_200(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
         def test_post_remove_item_from_order_when_missing_order_id_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_remove_item_from_order_when_missing_name_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_remove_item_from_order_when_item_does_not_exist_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'doesnotexist', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_remove_item_from_order_when_item_is_not_in_order_returns_400(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'cheese', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_remove_item_from_order_when_order_id_does_not_exist_returns_400(self):
             post_data = {'order_id': 'doesnotexist', 'item': 'cheese', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 400)
 
         def test_post_remove_item_from_order_when_given_order_and_item_removes_item(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -297,17 +297,17 @@ def MakeClientTests(baseurl):
             expected['items'] = []
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
 
         def test_post_remove_item_from_order_when_given_order_and_item_removes_some_items(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 5}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -316,17 +316,17 @@ def MakeClientTests(baseurl):
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
 
         def test_post_remove_item_from_order_when_missing_amount_defaults_to_1(self):
             order_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=order_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order_data))
             self.assertEqual(r.status_code, 200)
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 5}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -335,7 +335,7 @@ def MakeClientTests(baseurl):
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk'}
-            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
@@ -343,18 +343,18 @@ def MakeClientTests(baseurl):
         # getorder
         def test_get_get_order_when_given_valid_order_id_returns_200(self):
             post_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=post_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/getorder/' + self.order_id)
             self.assertEqual(r.status_code, 200)
 
         def test_get_get_order_when_given_valid_order_id_with_items_returns_200(self):
             post_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=post_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -367,11 +367,11 @@ def MakeClientTests(baseurl):
 
         def test_get_get_order_when_given_valid_order_id_with_weighted_items_returns_200(self):
             post_data = {'id': self.order_id}
-            r = requests.post(baseurl + '/createorder', data=post_data)
+            r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             post_data = {'order_id': self.order_id, 'item': 'cheese', 'amount': 1}
-            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
             expected = dict()

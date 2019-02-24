@@ -30,29 +30,29 @@ def MakeHelpersTests(baseurl):
             l = 123
             self.assertRaises(TypeError, H.is_in_list, l, 123)
 
-        # parse_post_vars
-        def test_parse_post_vars_when_post_to_ping_with_no_data_get_back_no_data(self):
+        # get_raw_post_data
+        def test_get_raw_post_data_when_post_to_ping_with_no_data_get_back_no_data(self):
             r = requests.post(baseurl + '/ping')
             self.assertEqual(r.text, '{}')
 
-        def test_parse_post_vars_when_post_to_ping_with_data_get_back_same_data(self):
+        def test_get_raw_post_data_when_post_to_ping_with_data_get_back_same_data(self):
             post_data = {'test': 'ing'}
-            r = requests.post(baseurl + '/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=json.dumps(post_data))
             self.assertEqual(r.text, json.dumps(post_data))
 
-        def test_parse_post_vars_when_post_to_ping_with_empty_data_get_back_empty_data(self):
+        def test_get_raw_post_data_when_post_to_ping_with_empty_data_get_back_empty_data(self):
             post_data = {}
-            r = requests.post(baseurl + '/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=json.dumps(post_data))
             self.assertEqual(r.text, json.dumps(post_data))
 
-        def test_parse_post_vars_when_post_to_ping_with_multiple_value_for_same_key_get_back_last_value(self):
+        def test_get_raw_post_data_when_post_to_ping_with_multiple_value_for_same_key_get_back_last_value(self):
             post_data = {'test': 'ing', 'test': '123'}
-            r = requests.post(baseurl + '/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=json.dumps(post_data))
             self.assertEqual(r.text, json.dumps({'test': '123'}))
 
-        def test_parse_post_vars_when_post_to_ping_with_multiple_keys_and_values_get_back_same_data(self):
+        def test_get_raw_post_data_when_post_to_ping_with_multiple_keys_and_values_get_back_same_data(self):
             post_data = {'test': 'ing', 'ing': 'test'}
-            r = requests.post(baseurl + '/ping', data=post_data)
+            r = requests.post(baseurl + '/ping', data=json.dumps(post_data))
             self.assertEqual(r.text, json.dumps(post_data))
 
         # get_value
@@ -120,5 +120,10 @@ def MakeHelpersTests(baseurl):
 
         def test_parse_float_when_given_string_aaa_returns_default(self):
             self.assertEqual(H.parse_float('aaa'), -1)
+
+        # parse_json
+        def test_parse_json_when_given_json_returns_json_as_dict(self):
+            json_str = "{}"
+            self.assertEqual(H.parse_json(json_str), dict())
 
     return HelpersTests

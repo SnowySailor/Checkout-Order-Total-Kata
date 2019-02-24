@@ -3,8 +3,9 @@ import threading
 import json
 from urllib.parse import urlparse
 
-from src.helpers import set_response, parse_post_vars, get_value, get_path_id,\
-    get_raw_post_data, parse_url_query, parse_int, parse_float
+from src.helpers import set_response, get_value, get_path_id,\
+    get_raw_post_data, parse_url_query, parse_int, parse_float,\
+    parse_json
 from src.database import DataStore
 from src.models.item import Item, Methods
 from src.models.order import MakeOrder
@@ -92,14 +93,16 @@ def MakeRequestHandler(is_testing_mode, datastore):
         # HTTP POST handlers
         def do_post_ping(self):
             # Read the post variables and return them to the client
-            post_vars = parse_post_vars(self)
-            json_resp = json.dumps(post_vars)
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            json_resp = json.dumps(post_dict)
             set_response(self, 200, json_resp)
 
         def do_post_data_store(self):
-            post_vars = parse_post_vars(self)
-            key       = get_value(post_vars, 'key')
-            value     = get_value(post_vars, 'value')
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            key       = get_value(post_dict, 'key')
+            value     = get_value(post_dict, 'value')
 
             if key is None:
                 set_response(self, 400, 'Must provide key', 'text/text')
@@ -110,8 +113,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 200, '')
 
         def do_post_create_item(self):
-            item_json = get_raw_post_data(self)
-            item_dict = json.loads(item_json)
+            post_data = get_raw_post_data(self)
+            item_dict = parse_json(post_data)
 
             # Pull out all of the fields we need
             name           = get_value(item_dict, 'name')
@@ -139,8 +142,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 200, '')
 
         def do_post_create_order(self):
-            post_vars = parse_post_vars(self)
-            order_id  = get_value(post_vars, 'id')
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            order_id  = get_value(post_dict, 'id')
             # Ensure the client provided an id to create
             if order_id is None or order_id == '':
                 set_response(self, 400, 'Must provide id.', 'text/text')
@@ -155,9 +159,10 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 400, 'Order with that id already exists.', 'text/text')
 
         def do_post_add_item_to_order(self):
-            post_vars = parse_post_vars(self)
-            order_id  = get_value(post_vars, 'order_id')
-            item_name = get_value(post_vars, 'item')
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            order_id  = get_value(post_dict, 'order_id')
+            item_name = get_value(post_dict, 'item')
 
             msg = ''
             if order_id is None or order_id == '':
@@ -174,7 +179,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 # If the item is a UNIT type, we only want to allow integers
                 # for the amount since it doesn't make sense to have something
                 # like 1.25 cans of soup
-                amount = parse_float(get_value(post_vars, 'amount'), 1.0)
+                amount = parse_float(get_value(post_dict, 'amount'), 1.0)
                 if item.billing_method == Methods.UNIT:
                     amount = parse_int(amount)
 
@@ -182,9 +187,10 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 200, '')
 
         def do_post_remove_item_from_order(self):
-            post_vars = parse_post_vars(self)
-            order_id  = get_value(post_vars, 'order_id')
-            item_name = get_value(post_vars, 'item')
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            order_id  = get_value(post_dict, 'order_id')
+            item_name = get_value(post_dict, 'item')
 
             msg = ''
             if order_id is None or order_id == '':
@@ -207,7 +213,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     # If the item is a UNIT type, we only want to allow integers
                     # for the amount since it doesn't make sense to have something
                     # like 1.25 cans of soup
-                    amount = parse_float(get_value(post_vars, 'amount'), 1.0)
+                    amount = parse_float(get_value(post_dict, 'amount'), 1.0)
                     if item.billing_method == Methods.UNIT:
                         amount = parse_int(amount)
 

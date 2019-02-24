@@ -1,5 +1,6 @@
 from cgi import parse_header, parse_multipart
 from urllib.parse import parse_qsl, urlparse
+import json
 
 def is_in_list(l, v):
     if l is None:
@@ -54,6 +55,9 @@ def parse_post_vars(self):
 def get_raw_post_data(self):
     length = int(self.headers['content-length'])
     return self.rfile.read(length)
+
+def parse_json(json_str, default = None):
+    return json.loads(json_str)
 
 def parse_url_query(path):
     query = urlparse(path).query
