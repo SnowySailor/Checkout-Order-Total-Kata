@@ -177,19 +177,23 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         def do_post_remove_item_from_order(self):
             post_vars = parse_post_vars(self)
-            order_id = get_value(post_vars, 'order_id')
-            item     = get_value(post_vars, 'item')
-            
+            order_id  = get_value(post_vars, 'order_id')
+            item_name = get_value(post_vars, 'item')
+
             msg = ''
             if order_id is None or order_id == '':
                 msg += 'Must provide order_id. '
-            if item is None or item == '':
+            if item_name is None or item_name == '':
                 msg += 'Must provide item. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
-                set_response(self, 200, '')
+                item = datastore.get('itemdetails:' + item_name)
+                if item is None:
+                    set_response(self, 400, 'Item does not exist.', 'text/text')
+                else:
+                    set_response(self, 200, '')
 
 
         # HTTP DELETE handlers
