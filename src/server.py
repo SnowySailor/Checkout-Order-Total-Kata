@@ -189,9 +189,12 @@ def MakeRequestHandler(is_testing_mode, datastore):
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
-                item = datastore.get('itemdetails:' + item_name)
+                item  = datastore.get('itemdetails:' + item_name)
+                order = datastore.get('orders:' + order_id)
                 if item is None:
                     set_response(self, 400, 'Item does not exist.', 'text/text')
+                if get_value(order.items, item_name) is None:
+                    set_response(self, 400, 'Order does not contain provided item.', 'text/text')
                 else:
                     set_response(self, 200, '')
 
