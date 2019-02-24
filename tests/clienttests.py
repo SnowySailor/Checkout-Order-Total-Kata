@@ -231,4 +231,8 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/getorder/doesnotexist')
             self.assertEqual(r.status_code, 400)
 
+        def test_get_get_order_when_not_given_order_id_returns_400(self):
+            r = requests.get(baseurl + '/getorder/')
+            self.assertEqual(r.status_code, 400)
+
     return ClientTests
