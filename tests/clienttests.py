@@ -203,6 +203,17 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
 
+        def test_post_remove_item_from_order_when_given_item_and_order_returns_200(self):
+            order_data = {'id': self.order_id}
+            r = requests.post(baseurl + '/createorder', data=order_data)
+            self.assertEqual(r.status_code, 200)
+            post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
+            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+            post_data = {'order_id': self.order_id, 'item': 'milk'}
+            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+
         # getorder
         def test_get_get_order_when_given_valid_order_id_returns_200(self):
             post_data = {'id': self.order_id}

@@ -40,6 +40,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_post_create_order()
             elif path == '/additemtoorder':
                 self.do_post_add_item_to_order()
+            elif path == '/removeitemfromorder':
+                self.do_post_remove_item_from_order()
             else:
                 set_response(self, 404, '404', 'text/html')
 
@@ -172,6 +174,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 order.add_item(item, amount)
 
                 set_response(self, 200, '')
+
+        def do_post_remove_item_from_order(self):
+            set_response(self, 200, '')
 
 
         # HTTP DELETE handlers
