@@ -14,13 +14,13 @@ class Order:
 
     def remove_item(self, item, removed_amount):
         # Get the amount we currently are holding for this order
-        current_amount = get_value(self.items, item, 0)
+        current_amount = get_value(self.items, item.name, 0)
         # Remove the desired amount
         new_amount = current_amount - removed_amount
         # It doesn't make sense to have a zero or negative amount of items
         # so if the value goes negative or is 0, we want to delete the item
         # from the order
-        if new_amount < 0:
+        if new_amount <= 0:
             del self.items[item.name]
         else:
             self.items[item.name] = new_amount
