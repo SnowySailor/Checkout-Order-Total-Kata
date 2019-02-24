@@ -259,6 +259,11 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
             self.assertEqual(r.status_code, 400)
 
+        def test_post_remove_item_from_order_when_order_id_does_not_exist_returns_400(self):
+            post_data = {'order_id': 'doesnotexist', 'item': 'cheese'}
+            r = requests.post(baseurl + '/removeitemfromorder', data=post_data)
+            self.assertEqual(r.status_code, 400)
+
         # getorder
         def test_get_get_order_when_given_valid_order_id_returns_200(self):
             post_data = {'id': self.order_id}
