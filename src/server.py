@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from src.helpers import set_response, parse_post_vars, get_value, get_path_id, get_raw_post_data, parse_url_query
 from src.database import DataStore
 from src.models.item import Item, Methods
+from src.models.order import Order
 
 def MakeRequestHandler(is_testing_mode, datastore):
     class RequestHandler(BaseHTTPRequestHandler):
@@ -74,7 +75,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 400, 'Item does not exist.', 'text/text')
 
         def do_get_order(self):
-            set_response(self, 200, '')
+            order_id = get_path_id(self.path)
+            order = datastore.get('orders:' + order_id)
+            set_response(self, 200, order.to_json())
 
 
         # HTTP POST handlers
@@ -136,14 +139,22 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 # If the order already exists, we don't want to overwrite it
                 # Instead, tell the user that there was a problem
                 if datastore.get('orders:' + order_id) is None:
-                    # Store the value as a list for now because it will eventually
-                    # be a list of items scanned
-                    datastore.set('orders:' + order_id, list())
+                    order = Order(order_id)
+                    datastore.set('orders:' + order_id, order)
                     set_response(self, 200, '')
                 else:
                     set_response(self, 400, 'Order with that id already exists.', 'text/text')
 
         def do_post_add_item_to_order(self):
+            post_vars = parse_post_vars(self)
+            order_id  = get_value(post_vars, 'order_id')
+            item_name = get_value(post_vars, 'item')
+            amount    = float(get_value(post_vars, 'amount'))
+
+            order = datastore.get('orders:' + order_id)
+            item  = datastore.get('itemdetails:' + item_name)
+            order.add_item(item, amount)
+
             set_response(self, 200, '')
 
 

@@ -157,7 +157,7 @@ def MakeClientTests(baseurl):
             order_data = {'id': 3}
             r = requests.post(baseurl + '/createorder', data=order_data)
             self.assertEqual(r.status_code, 200)
-            post_data = {'order_id': 3, 'item': 'cherries'}
+            post_data = {'order_id': 3, 'item': 'cherries', 'amount': 1.56}
             r = requests.post(baseurl + '/additemtoorder', data=post_data)
             self.assertEqual(r.status_code, 200)
 
@@ -167,6 +167,22 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=post_data)
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/getorder/4')
+            self.assertEqual(r.status_code, 200)
+
+        def test_get_get_order_when_given_valid_order_id_with_items_returns_200(self):
+            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
+            self.assertEqual(r.status_code, 200)
+
+            post_data = {'id': 5}
+            r = requests.post(baseurl + '/createorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+
+            post_data = {'order_id': 5, 'item': 'milk', 'amount': 1}
+            r = requests.post(baseurl + '/additemtoorder', data=post_data)
+            self.assertEqual(r.status_code, 200)
+
+            r = requests.get(baseurl + '/getorder/5')
             self.assertEqual(r.status_code, 200)
 
     return ClientTests
