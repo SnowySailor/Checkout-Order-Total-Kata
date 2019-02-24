@@ -11,6 +11,9 @@ def get_value(d, key, default = None):
         return default
     return d[key]
 
+def parse_int(val, default = -1):
+    return int(val)
+
 def set_response(handler, status_code, content, content_type = 'application/json'):
     handler.send_response(status_code)
     handler.send_header('Content-Type', content_type)

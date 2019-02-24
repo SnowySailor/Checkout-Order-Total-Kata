@@ -182,7 +182,11 @@ def MakeClientTests(baseurl):
             r = requests.post(baseurl + '/additemtoorder', data=post_data)
             self.assertEqual(r.status_code, 200)
 
+            expected = dict()
+            expected['id'] = 5
+            expected['items'] = [{'name': 'milk', 'amount': 1.0}]
             r = requests.get(baseurl + '/getorder/5')
             self.assertEqual(r.status_code, 200)
+            self.assertEqual(r.text, json.dumps(expected))
 
     return ClientTests

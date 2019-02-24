@@ -18,6 +18,8 @@ class Order:
         d = dict()
         d['id'] = self.order_id
         d['items'] = list()
+        # For each item and its amount in the order, add the info
+        # to the list of items in the order for serialization
         for item, amount in self.items.items():
             item_dict = dict()
             item_dict['name'] = item.name

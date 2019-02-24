@@ -101,4 +101,8 @@ def MakeHelpersTests(baseurl):
             p = None
             self.assertEqual(H.get_path_id(p), '')
 
+        # parse_int
+        def test_parse_int_when_given_string_123_returns_123(self):
+            self.assertEqual(H.parse_int('123'), 123)
+
     return HelpersTests
