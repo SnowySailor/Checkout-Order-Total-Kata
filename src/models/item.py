@@ -1,7 +1,8 @@
 import json
 import enum
-from src.helpers import get_value
+from src.helpers import get_value, parse_float
 from src.models.specials.AforB import AforB
+from src.models.specials.BuyAgetBforCoff import BuyAgetBforCoff
 
 class Methods(enum.Enum):
     WEIGHT = 'weight'
@@ -21,8 +22,13 @@ class Item:
         special_type = get_value(special, 'type')
         if special_type == 'AforB':
             buy    = get_value(special, 'buy')
-            amount = get_value(special, 'for')
+            amount = parse_float(get_value(special, 'for'), 0.0)
             self.special = AforB(buy, amount)
+        elif special_type == 'buyAgetBforCoff':
+            buy = get_value(special, 'buy')
+            get = get_value(special, 'get')
+            off = parse_float(get_value(special, 'off'), 0.0)
+            self.special = BuyAgetBforCoff(buy, get, off)
 
     def to_json(self):
         # Push all item values into a dict and dump it as json

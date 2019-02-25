@@ -116,10 +116,17 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.text, json.dumps(second_item))
 
         def test_post_create_item_with_AforB_special_saves_special(self):
-            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5, 'for': 3}}
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=pasta')
+            self.assertEqual(r.text, json.dumps(item))
+
+        def test_post_create_item_with_buyAgetBforCoff_special_saves_special(self):
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 0.50}}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(item))
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=chicken')
             self.assertEqual(r.text, json.dumps(item))
 
         def test_post_create_item_when_item_already_exists_it_is_overwritten_and_orders_totals_update(self):
