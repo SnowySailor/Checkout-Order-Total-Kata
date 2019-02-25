@@ -5,6 +5,7 @@ from src.models.specials.AforB import AforB
 from src.models.specials.BuyAgetBforCoff import BuyAgetBforCoff
 from src.models.specials.GetEOLforAoff import GetEOLforAoff
 
+# Two different methods of billing the customer for an item
 class Methods(enum.Enum):
     WEIGHT = 'weight'
     UNIT   = 'unit'
@@ -18,8 +19,11 @@ class Item:
         else:
             # Default to price per item scanned
             self.billing_method = Methods.UNIT
-
+        # Default the special to none
         self.special = None
+
+        # Parse the special out based on its type. The validity of
+        # the special has already been verified
         special_type = get_value(special, 'type')
         if special_type == 'AforB':
             buy    = get_value(special, 'buy')
@@ -41,6 +45,7 @@ class Item:
         d['name']           = self.name
         d['price']          = self.price
         d['billing_method'] = self.billing_method.value
+        # Only want to return the special to the client if one exists
         if self.special is not None:
             d['special'] = self.special.to_dict()
         return json.dumps(d)
