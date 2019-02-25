@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 
 from src.helpers import set_response, get_value, get_path_id,\
     get_raw_post_data, parse_url_query, parse_int, parse_float,\
-    parse_json
+    parse_json, validate_special
 from src.database import DataStore
 from src.models.item import Item, Methods
 from src.models.order import MakeOrder
@@ -133,10 +133,16 @@ def MakeRequestHandler(is_testing_mode, datastore):
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
-                # Create and storet the item and tell the user everything is fine
-                item = Item(name, price, billing_method, special)
-                datastore.set('itemdetails:' + item.name, item)
-                set_response(self, 200, '')
+                # Check to see if the provided special is valid
+                if special is not None:
+                    msg = validate_special(special)
+                if msg != '':
+                    set_response(self, 400, msg, 'text/text')
+                else:
+                    # Create and store the item and tell the user everything is fine
+                    item = Item(name, price, billing_method, special)
+                    datastore.set('itemdetails:' + item.name, item)
+                    set_response(self, 200, '')
 
         def do_post_create_order(self):
             post_data = get_raw_post_data(self)

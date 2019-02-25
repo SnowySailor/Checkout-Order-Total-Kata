@@ -55,3 +55,12 @@ def get_path_id(path):
     # We want 'three' if the path is /one/two/three
     path_list = path.split('/')
     return path_list[-1]
+
+def validate_special(special):
+    special_type = get_value(special, 'type')
+    msg = ''
+    if special_type == 'AforB':
+        if get_value(special, 'buy') is None:
+            msg += 'Must provide buy. '
+
+    return msg
