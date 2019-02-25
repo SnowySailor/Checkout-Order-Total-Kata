@@ -22,19 +22,20 @@ class BuyAgetBforCoff:
     def calculate_best_savings(self, applied_to_item, items, datastore):
         item = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
 
+        # How many items are involved in each application of this special
+        chunk_size = self.buy + self.get
+
         # If the number of items you have to buy is greater than the limit,
         # there is no way this special can apply to anything
-        if self.limit is not None and self.buy + self.get > self.limit:
+        if self.limit is not None and chunk_size > self.limit:
             return 0
 
         amount = get_value(applied_to_item, 'amount', 0)
         # If the customer hasn't bought the minimum amount, there is no
         # way there can be any savings
-        if amount < self.buy + self.get:
+        if amount < chunk_size:
             return 0
 
-        # How many items are involved in each application of this special
-        chunk_size = self.buy + self.get
         # How many applications of this special can there be?
         chunks = math.floor(amount / chunk_size)
 
