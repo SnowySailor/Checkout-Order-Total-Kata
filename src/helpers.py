@@ -71,5 +71,7 @@ def validate_special(special):
             msg += 'Must provide get. '
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
-
+    elif special_type == 'getEOLforAoff':
+        if get_value(special, 'off') is None:
+            msg += 'Must provide off. '
     return msg
