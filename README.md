@@ -25,6 +25,8 @@ Used to create a new item definition in the application. Accepts JSON in the POS
 ```
 The `"price"` field is the decimal cost of the item per billing unit. For example, if the `"price"` of a can of soup is set to $5.00 and the `"billing_method"` is set to `"unit"`, then the total pre-tax cost of 3 cans of soup would be 3 * $5.00, or $15.00. However, if the `"price"` of 1 pound of grapes is set to $2.35 and the grapes have a `"billing_method"` of 'weight', then 2 pounds of grapes would cost 2 * $2.35, or $4.70.
 
+To mark down an item's price, simply re-POST the same JSON with the updated price. All existing orders will have their totals updated automatically.
+
 ---
 ### `/itemdetails?name={item_name}`
 When given an item name, returns JSON in the same format as the JSON that is accepted by `/createitem`
@@ -64,7 +66,7 @@ Create a new order to hold items for a customer. Accepts JSON in the POST body o
 The `"id"` must be unique. It is suggested that a 128-bit UUID is used to prevent collisions from occurring. An order with a given `"id"` can only be created once and cannot be deleted.
 
 ---
-### `/getorder/{order_id}`
+### `/getorder?order_id={order_id}`
 Returns a JSON-encoded string with information about the order corresponding to the order id provided. The JSON returned will be of the following form:
 ```json
 {
