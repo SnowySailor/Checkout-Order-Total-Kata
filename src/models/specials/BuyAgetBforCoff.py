@@ -36,6 +36,12 @@ class BuyAgetBforCoff:
         if amount < chunk_size:
             return 0
 
+        # If the amount the customer is buying is more than the limit for
+        # the special, just decrease the amount that the special will be
+        # applied to
+        if self.limit is not None and amount > self.limit:
+            amount = self.limit
+
         # How many applications of this special can there be?
         chunks = math.floor(amount / chunk_size)
 
