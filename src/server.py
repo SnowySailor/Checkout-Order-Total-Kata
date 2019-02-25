@@ -80,7 +80,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         def do_get_order(self):
             url_query = parse_url_query(self.path)
-            order_id = get_value(url_query, 'order_id')
+            order_id = get_value(url_query, 'id')
             if order_id is None or order_id == '':
                 set_response(self, 400, 'Must provide order id')
             else:
@@ -121,11 +121,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             name           = get_value(item_dict, 'name')
             price          = get_value(item_dict, 'price', 0)
             billing_method = get_value(item_dict, 'billing_method', '')
-            if billing_method.lower() == 'weight':
-                billing_method = Methods.WEIGHT
-            else:
-                # Default to price per item scanned
-                billing_method = Methods.UNIT
+            special        = get_value(item_dict, 'special')
 
             # Ensure that all necessary data is present
             msg = ''
@@ -138,7 +134,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 set_response(self, 400, msg, 'text/text')
             else:
                 # Create and storet the item and tell the user everything is fine
-                item = Item(name, price, billing_method)
+                item = Item(name, price, billing_method, special)
                 datastore.set('itemdetails:' + item.name, item)
                 set_response(self, 200, '')
 

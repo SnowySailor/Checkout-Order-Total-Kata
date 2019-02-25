@@ -8,7 +8,7 @@ def is_in_list(l, v):
     return v in l
 
 def get_value(d, key, default = None):
-    if key not in d:
+    if d is None or key not in d:
         return default
     return d[key]
 

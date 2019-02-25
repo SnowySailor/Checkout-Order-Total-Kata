@@ -115,6 +115,13 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails?name=cherries')
             self.assertEqual(r.text, json.dumps(second_item))
 
+        def test_post_create_item_with_AforB_special_saves_special(self):
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5, 'for': 3}}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(item))
+            self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=pasta')
+            self.assertEqual(r.text, json.dumps(item))
+
         def test_post_create_item_when_item_already_exists_it_is_overwritten_and_orders_totals_update(self):
             first_item = {'name': 'pie', 'price': 5.00, 'billing_method': 'unit'}
             second_item = {'name': 'pie', 'price': 4.05, 'billing_method': 'unit'}
@@ -126,7 +133,7 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(order_item))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -138,7 +145,7 @@ def MakeClientTests(baseurl):
 
             r = requests.post(baseurl + '/createitem', data=json.dumps(second_item))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
 
             expected = dict()
@@ -232,7 +239,7 @@ def MakeClientTests(baseurl):
             expected['id'] = self.order_id
             expected['total'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
 
@@ -251,7 +258,7 @@ def MakeClientTests(baseurl):
             expected['id'] = self.order_id
             expected['total'] = 37.95
             expected['items'] = [{'name': 'cheese', 'amount': 6.6}]
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
 
@@ -332,7 +339,7 @@ def MakeClientTests(baseurl):
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
             r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
 
         def test_post_remove_item_from_order_when_given_order_and_item_removes_some_items(self):
@@ -351,7 +358,7 @@ def MakeClientTests(baseurl):
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
             r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
 
         def test_post_remove_item_from_order_when_missing_amount_defaults_to_1(self):
@@ -370,7 +377,7 @@ def MakeClientTests(baseurl):
             post_data = {'order_id': self.order_id, 'item': 'milk'}
             r = requests.post(baseurl + '/removeitemfromorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.text, json.dumps(expected))
 
         # getorder
@@ -378,7 +385,7 @@ def MakeClientTests(baseurl):
             post_data = {'id': self.order_id}
             r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
 
         def test_get_get_order_when_given_valid_order_id_with_items_returns_200(self):
@@ -394,7 +401,7 @@ def MakeClientTests(baseurl):
             expected['id'] = self.order_id
             expected['total'] = 1.50
             expected['items'] = [{'name': 'milk', 'amount': 1}]
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
 
@@ -411,12 +418,12 @@ def MakeClientTests(baseurl):
             expected['id'] = self.order_id
             expected['total'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
-            r = requests.get(baseurl + '/getorder?order_id=' + self.order_id)
+            r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
 
         def test_get_get_order_when_order_id_does_not_exist_returns_400(self):
-            r = requests.get(baseurl + '/getorder?order_id=doesnotexist')
+            r = requests.get(baseurl + '/getorder?id=doesnotexist')
             self.assertEqual(r.status_code, 400)
 
         def test_get_get_order_when_not_given_order_id_returns_400(self):
