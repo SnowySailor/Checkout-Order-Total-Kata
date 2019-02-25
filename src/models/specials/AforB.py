@@ -1,5 +1,4 @@
-import json
-
+# "Buy 3 cans of soup for $5.00"
 class AforB:
     def __init__(self, amount, price):
         self.price  = price

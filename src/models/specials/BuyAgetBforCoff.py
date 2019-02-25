@@ -1,3 +1,4 @@
+# Buy 1, get 1 for 50% off (limit 4)
 class BuyAgetBforCoff:
     def __init__(self, count, get, off, limit):
         self.count = count
@@ -14,4 +15,3 @@ class BuyAgetBforCoff:
         if self.limit is not None:
             d['limit'] = self.limit
         return d
-
