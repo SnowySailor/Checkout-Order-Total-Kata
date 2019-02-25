@@ -24,7 +24,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_get_data_store()
             elif path == '/itemdetails':
                 self.do_get_item_details()
-            elif path.startswith('/getorder/'):
+            elif path == '/getorder':
                 self.do_get_order()
             else:
                 set_response(self, 404, '404', 'text/html')
@@ -79,7 +79,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 400, 'Item does not exist.', 'text/text')
 
         def do_get_order(self):
-            order_id = get_path_id(self.path)
+            url_query = parse_url_query(self.path)
+            order_id = get_value(url_query, 'order_id')
             if order_id is None or order_id == '':
                 set_response(self, 400, 'Must provide order id')
             else:
