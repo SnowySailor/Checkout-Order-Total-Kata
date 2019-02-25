@@ -67,5 +67,7 @@ def validate_special(special):
     elif special_type == 'buyAgetBforCoff':
         if get_value(special, 'buy') is None:
             msg += 'Must provide buy. '
+        if get_value(special, 'get') is None:
+            msg += 'Must provide get. '
 
     return msg
