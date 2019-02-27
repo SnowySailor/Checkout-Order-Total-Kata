@@ -74,4 +74,9 @@ def validate_special(special):
     elif special_type == 'getEOLforAoff':
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
+    elif special_type == 'markdown':
+        if get_value(special, 'percentage') is None:
+            msg += 'Must provide percentage. '
+    else:
+        msg += 'Invalid special type. '
     return msg

@@ -1,9 +1,10 @@
 import json
 import enum
 from src.helpers import get_value, parse_float, parse_int
-from src.models.specials.AforB import AforB
-from src.models.specials.BuyAgetBforCoff import BuyAgetBforCoff
-from src.models.specials.GetEOLforAoff import GetEOLforAoff
+from src.models.specials.aforb import AforB
+from src.models.specials.buyagetbforcoff import BuyAgetBforCoff
+from src.models.specials.geteolforaoff import GetEOLforAoff
+from src.models.specials.markdown import Markdown
 
 # Two different methods of billing the customer for an item
 class Methods(enum.Enum):
@@ -38,6 +39,9 @@ class Item:
         elif special_type == 'getEOLforAoff':
             off = parse_float(get_value(special, 'off'), 0.0)
             self.special = GetEOLforAoff(off)
+        elif special_type == 'markdown':
+            percentage = parse_float(get_value(special, 'percentage'), 0.0)
+            self.special = Markdown(percentage)
 
     def to_json(self):
         # Push all item values into a dict and dump it as json

@@ -1,3 +1,4 @@
+# Buy cheese, get any other item of equal or lesser value for 25% off"
 class GetEOLforAoff:
     def __init__(self, off):
         self.off = off

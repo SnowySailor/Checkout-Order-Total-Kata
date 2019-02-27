@@ -29,7 +29,7 @@ def MakeOrder(new_order_id, datastore):
         def to_json(self):
             d = dict()
             d['id'] = self.order_id
-            d['total'] = self.calculate_total()
+            d['total'] = self.calculate_total_no_specials()
             d['items'] = list()
             # For each item and its amount in the order, add the info
             # to the list of items in the order for serialization
@@ -40,12 +40,13 @@ def MakeOrder(new_order_id, datastore):
                 d['items'].append(item_dict)
             return json.dumps(d)
 
-        def calculate_total(self):
+        def calculate_total_no_specials(self):
             total = 0.00
             for item_name, amount in self.items.items():
                 item = datastore.get('itemdetails:' + item_name)
                 total += amount * item.price
 
+            # Round to two decimal places
             return round(total, 2)
 
 
