@@ -181,6 +181,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
                 if order is None:
                     set_response(self, 400, 'Order does not exist.', 'text/text')
+                elif item is None:
+                    set_response(self, 400, 'Item does not exist.', 'text/text')
                 else:
                     # If the item is a UNIT type, we only want to allow integers
                     # for the amount since it doesn't make sense to have something
