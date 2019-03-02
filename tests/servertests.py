@@ -129,4 +129,12 @@ def MakeServerTests(baseurl):
             }
             self.assertNotEqual(H.validate_special(special, 'weight'), '')
 
+        def test_validate_special_AforB_with_unit_item_returns_ok(self):
+            special = {
+                'type': 'AforB',
+                'buy': 5,
+                'for': 3.00
+            }
+            self.assertEqual(H.validate_special(special, 'unit'), '')
+
     return ServerTests
