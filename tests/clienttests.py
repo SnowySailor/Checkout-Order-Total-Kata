@@ -116,24 +116,24 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.text, json.dumps(second_item))
 
         def test_post_create_item_with_AforB_special_saves_special(self):
-            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00}}
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=pasta')
             self.assertEqual(r.text, json.dumps(item))
 
         def test_post_create_item_with_AforB_special_missing_buy_returns_400(self):
-            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'for': 3.00}}
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'AforB', 'for': 3.00}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_item_with_AforB_special_missing_for_returns_400(self):
-            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5}}
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'AforB', 'buy': 5}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_item_with_AforB_with_limit_special_saves_special(self):
-            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00, 'limit': 10}}
+            item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00, 'limit': 10}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
 

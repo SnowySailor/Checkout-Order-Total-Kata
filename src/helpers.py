@@ -56,10 +56,13 @@ def get_path_id(path):
     path_list = path.split('/')
     return path_list[-1]
 
-def validate_special(special):
+def validate_special(special, billing_method):
     special_type = get_value(special, 'type')
+    billing_method = billing_method.lower()
     msg = ''
     if special_type == 'AforB':
+        if billing_method == 'weight':
+            msg += 'AforB special can only apply to items billed by the unit. '
         if get_value(special, 'buy') is None:
             msg += 'Must provide buy. '
         if get_value(special, 'for') is None:

@@ -135,7 +135,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             else:
                 # Check to see if the provided special is valid
                 if special is not None:
-                    msg = validate_special(special)
+                    msg = validate_special(special, billing_method)
                 if msg != '':
                     set_response(self, 400, msg, 'text/text')
                 else:

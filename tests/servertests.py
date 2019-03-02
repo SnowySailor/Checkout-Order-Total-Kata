@@ -1,9 +1,11 @@
 import unittest
 from src.models.item import Item
 from src.database import DataStore
+import src.helpers as H
 
 def MakeServerTests(baseurl):
     class ServerTests(unittest.TestCase):
+        # Calculating the savings from specials
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_1_amount_returns_0(self):
             special = {
                 'type': 'buyAgetBforCoff',
@@ -117,5 +119,14 @@ def MakeServerTests(baseurl):
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 10}, [], datastore)
             self.assertEqual(savings, 5.0)
+
+        # Validating specials
+        def test_validate_special_AforB_with_weight_item_returns_error(self):
+            special = {
+                'type': 'AforB',
+                'buy': 5,
+                'for': 3.00
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
 
     return ServerTests
