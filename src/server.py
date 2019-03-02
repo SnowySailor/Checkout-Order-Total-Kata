@@ -179,15 +179,18 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 order = datastore.get('orders:' + order_id)
                 item  = datastore.get('itemdetails:' + item_name)
 
-                # If the item is a UNIT type, we only want to allow integers
-                # for the amount since it doesn't make sense to have something
-                # like 1.25 cans of soup
-                amount = parse_float(get_value(post_dict, 'amount'), 1.0)
-                if item.billing_method == Methods.UNIT:
-                    amount = parse_int(amount)
+                if order is None:
+                    set_response(self, 400, 'Order does not exist.', 'text/text')
+                else:
+                    # If the item is a UNIT type, we only want to allow integers
+                    # for the amount since it doesn't make sense to have something
+                    # like 1.25 cans of soup
+                    amount = parse_float(get_value(post_dict, 'amount'), 1.0)
+                    if item.billing_method == Methods.UNIT:
+                        amount = parse_int(amount)
 
-                order.add_item(item, amount)
-                set_response(self, 200, '')
+                    order.add_item(item, amount)
+                    set_response(self, 200, '')
 
         def do_post_remove_item_from_order(self):
             post_data = get_raw_post_data(self)
