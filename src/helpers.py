@@ -61,13 +61,15 @@ def validate_special(special, billing_method):
     billing_method = billing_method.lower()
     msg = ''
     if special_type == 'AforB':
-        if billing_method == 'weight':
-            msg += 'AforB special can only apply to items billed by the unit. '
+        if billing_method != 'unit':
+            msg += 'Special can only apply to items billed by the unit. '
         if get_value(special, 'buy') is None:
             msg += 'Must provide buy. '
         if get_value(special, 'for') is None:
             msg += 'Must provide for. '
     elif special_type == 'buyAgetBforCoff':
+        if billing_method != 'unit':
+            msg += 'Special can only apply to items billed by the unit. '
         if get_value(special, 'buy') is None:
             msg += 'Must provide buy. '
         if get_value(special, 'get') is None:

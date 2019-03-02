@@ -151,5 +151,14 @@ def MakeServerTests(baseurl):
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
+        def test_validate_special_buyAgetBforCoff_with_weight_item_returns_error(self):
+            special = {
+                'type': 'buyAgetBforCoff',
+                'buy': 1,
+                'get': 4,
+                'off': 25
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
+
 
     return ServerTests

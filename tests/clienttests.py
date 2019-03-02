@@ -138,29 +138,29 @@ def MakeClientTests(baseurl):
             self.assertEqual(r.status_code, 200)
 
         def test_post_create_item_with_buyAgetBforCoff_special_saves_special(self):
-            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 50.0}}
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 50.0}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=chicken')
             self.assertEqual(r.text, json.dumps(item))
 
         def test_post_create_item_with_buyAgetBforCoff_special_missing_buy_returns_400(self):
-            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'get': 2, 'off': 50.0}}
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'get': 2, 'off': 50.0}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_item_with_buyAgetBforCoff_special_missing_get_returns_400(self):
-            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'buy': 2, 'off': 50.0}}
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'buy': 2, 'off': 50.0}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_item_with_buyAgetBforCoff_special_missing_off_returns_400(self):
-            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'buy': 2, 'get': 1}}
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'buy': 2, 'get': 1}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 400)
 
         def test_post_create_item_with_buyAgetBforCoff_special_with_limit_saves_special(self):
-            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'weight', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 50.0, 'limit': 5}}
+            item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 50.0, 'limit': 5}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
             r = requests.get(baseurl + '/itemdetails?name=chicken')
