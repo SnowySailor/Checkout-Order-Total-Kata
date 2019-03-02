@@ -169,5 +169,12 @@ def MakeServerTests(baseurl):
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
+        def test_validate_special_getEOLforAoff_with_unit_item_returns_error(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': 50
+            }
+            self.assertNotEqual(H.validate_special(special, 'unit'), '')
+
 
     return ServerTests

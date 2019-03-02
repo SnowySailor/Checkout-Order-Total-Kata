@@ -77,6 +77,8 @@ def validate_special(special, billing_method):
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
     elif special_type == 'getEOLforAoff':
+        if billing_method != 'weight':
+            msg += 'Special can only apply to items billed by weight. '
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
     elif special_type == 'markdown':
