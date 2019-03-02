@@ -185,6 +185,11 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails?name=beans')
             self.assertEqual(r.text, json.dumps(item))
 
+        def test_post_create_item_with_markdown_special_missing_percentage_returns_400(self):
+            item = {'name': 'beans', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'markdown'}}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(item))
+            self.assertEqual(r.status_code, 400)
+
         def test_post_create_item_with_markdown_special_with_limit_saves_special(self):
             item = {'name': 'beans', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'markdown', 'percentage': 50.0, 'limit': 10}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
