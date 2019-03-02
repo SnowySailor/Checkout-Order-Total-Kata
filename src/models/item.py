@@ -28,8 +28,9 @@ class Item:
         special_type = get_value(special, 'type')
         if special_type == 'AforB':
             buy    = get_value(special, 'buy')
+            limit  = parse_int(get_value(special, 'limit'), None)
             amount = parse_float(get_value(special, 'for'), 0.0)
-            self.special = AforB(buy, amount)
+            self.special = AforB(buy, amount, limit)
         elif special_type == 'buyAgetBforCoff':
             buy   = get_value(special, 'buy')
             get   = get_value(special, 'get')

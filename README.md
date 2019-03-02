@@ -46,7 +46,7 @@ There are four specials that are supported:
   }
   ```
 
-* Buy an item and get any other item of equal or lesser value for X off. This special can not have a limit. As an example, if a customer buys 5lbs of ground beef for $10, they can get any other item in the store that is $10 or less for 50% off.
+* Buy an item and get any other item of equal or lesser value for X off. This special can not have a limit. As an example, if a customer buys 5lbs of ground beef for $10, they can get any other item in the store that is $10 or less for 50% off. Example JSON:
   ```json
   {
     "type": "getEOLforAoff",
@@ -136,6 +136,7 @@ In this example, there were only two items in the order. In reality, it could be
 
 ## TODO:
 * Add a limit to all specials
+* Make sure that percentages and other various numbers in specials can't be negative or over 100 (for percentages)
 * Restrict which specials can be added to the different types of items (based on the billing method).
 * Come up with a way to efficiently calculate the order total including specials
   * I noticed that when I checked out at the grocery store the other day, the specials were applied a few seconds after scanning my store card. I also noticed that not all of the price reductions were applied at the same time; one was applied, then a pause, then the second, then a pause, etc. The pauses between each special application got shorter and shorter as the specials were added. This tells me that there's some sort of incremental application of the specials going on and after each application, items that were a part of the special were removed from the possible items to apply future specials to.
