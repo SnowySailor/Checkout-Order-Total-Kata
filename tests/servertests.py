@@ -133,7 +133,7 @@ def MakeServerTests(baseurl):
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 2}], datastore)
             self.assertEqual(savings, 4.50)
 
-        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_item(self):
+        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_items(self):
             special = {
                 'type': 'getEOLforAoff',
                 'off': 50
@@ -145,6 +145,19 @@ def MakeServerTests(baseurl):
 
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 3}], datastore)
             self.assertEqual(savings, 5.00)
+
+        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_single_item(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': 50
+            }
+
+            datastore = DataStore()
+            item  = self.create_item('meat', 5.00, 'weight', special, datastore)
+            item2 = self.create_item('soup', 15.00, 'unit', None, datastore)
+
+            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}], datastore)
+            self.assertEqual(savings, 0.00)
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
