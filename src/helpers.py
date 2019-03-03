@@ -71,12 +71,21 @@ def validate_special(special, billing_method):
     elif special_type == 'buyAgetBforCoff':
         if billing_method != 'unit':
             msg += 'Special can only apply to items billed by the unit. '
-        if get_value(special, 'buy') is None:
+        buy = get_value(special, 'buy')
+        get = get_value(special, 'get')
+        off = get_value(special, 'off')
+        if buy is None:
             msg += 'Must provide buy. '
-        if get_value(special, 'get') is None:
+        else:
+            msg += validate_integer(buy)
+        if get is None:
             msg += 'Must provide get. '
-        if get_value(special, 'off') is None:
+        else:
+            msg += validate_integer(get)
+        if off is None:
             msg += 'Must provide off. '
+        else:
+            msg += validate_integer(off, 0, 100)
     elif special_type == 'getEOLforAoff':
         if billing_method != 'weight':
             msg += 'Special can only apply to items billed by weight. '
@@ -84,11 +93,7 @@ def validate_special(special, billing_method):
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
         else:
-            off = parse_int(off, None)
-            if off is None:
-                msg += 'Unable to parse off value to integer. '
-            elif off < 0 or off > 100:
-                msg += 'Off value must be between 0 and 100'
+            msg += validate_integer(off, 0, 100)
     elif special_type == 'markdown':
         if get_value(special, 'percentage') is None:
             msg += 'Must provide percentage. '
@@ -101,3 +106,13 @@ def validate_special(special, billing_method):
         msg += 'Limit must be greater than 0. '
 
     return msg
+
+def validate_integer(i, low = None, high = None):
+    i = parse_int(i, None)
+    if i is None:
+        return 'Unable to parse value to integer. '
+    elif low is not None and i < low:
+        return 'Value must be greater than or equal to {low}. '
+    elif high is not None and i > high:
+        return 'Value must be less than or equal to {high}. '
+    return ''

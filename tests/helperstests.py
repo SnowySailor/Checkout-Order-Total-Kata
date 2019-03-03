@@ -188,6 +188,15 @@ def MakeHelpersTests(baseurl):
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
+        def test_validate_special_buyAgetBforCoff_when_buy_get_off_not_numbers_returns_error(self):
+            special = {
+                'type': 'buyAgetBforCoff',
+                'buy': 'aaa',
+                'get': 'bbb',
+                'off': 'ccc'
+            }
+            self.assertNotEqual(H.validate_special(special, 'unit'), '')
+
         def test_validate_special_getEOLforAoff_with_unit_item_returns_error(self):
             special = {
                 'type': 'getEOLforAoff',
