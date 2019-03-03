@@ -322,6 +322,7 @@ def MakeServerTests(baseurl):
             savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, [], datastore)
             self.assertEqual(savings, 2.50)
 
+        # calculate_total
         def test_calculate_total_for_order_with_no_specials_and_4_items(self):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', None, datastore)
@@ -338,7 +339,7 @@ def MakeServerTests(baseurl):
             total = order.calculate_total()
             self.assertEqual(total, 111.33)
 
-        def test_calculate_total_for_order_with_no_specials_and_4_items(self):
+        def test_calculate_total_for_order_with_no_specials_and_4_items_2(self):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', None, datastore)
             item2 = self.create_item('peas', 1.78, 'unit', None, datastore)
