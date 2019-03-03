@@ -156,6 +156,14 @@ def MakeHelpersTests(baseurl):
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
+        def test_validate_special_AforB_when_buy_for_not_numbers_returns_error(self):
+            special = {
+                'type': 'AforB',
+                'buy': 'aaa',
+                'for': 'bbb'
+            }
+            self.assertNotEqual(H.validate_special(special, 'unit'), '')
+
         def test_validate_special_markdown_with_weight_item_returns_ok(self):
             special = {
                 'type': 'markdown',

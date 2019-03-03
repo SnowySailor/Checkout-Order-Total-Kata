@@ -64,10 +64,16 @@ def validate_special(special, billing_method):
     if special_type == 'AforB':
         if billing_method != 'unit':
             msg += 'Special can only apply to items billed by the unit. '
-        if get_value(special, 'buy') is None:
+        buy = get_value(special, 'buy')
+        f = get_value(special, 'for')
+        if buy is None:
             msg += 'Must provide buy. '
-        if get_value(special, 'for') is None:
+        else:
+            msg += validate_integer(buy, 0)
+        if f is None:
             msg += 'Must provide for. '
+        else:
+            msg += validate_float(f, 0)
     elif special_type == 'buyAgetBforCoff':
         if billing_method != 'unit':
             msg += 'Special can only apply to items billed by the unit. '
@@ -77,11 +83,11 @@ def validate_special(special, billing_method):
         if buy is None:
             msg += 'Must provide buy. '
         else:
-            msg += validate_integer(buy)
+            msg += validate_integer(buy, 0)
         if get is None:
             msg += 'Must provide get. '
         else:
-            msg += validate_integer(get)
+            msg += validate_integer(get, 0)
         if off is None:
             msg += 'Must provide off. '
         else:
@@ -114,6 +120,16 @@ def validate_integer(i, low = None, high = None):
     i = parse_int(i, None)
     if i is None:
         return 'Unable to parse value to integer. '
+    elif low is not None and i < low:
+        return 'Value must be greater than or equal to {low}. '
+    elif high is not None and i > high:
+        return 'Value must be less than or equal to {high}. '
+    return ''
+
+def validate_float(i, low = None, high = None):
+    i = parse_int(i, None)
+    if i is None:
+        return 'Unable to parse value to float. '
     elif low is not None and i < low:
         return 'Value must be greater than or equal to {low}. '
     elif high is not None and i > high:
