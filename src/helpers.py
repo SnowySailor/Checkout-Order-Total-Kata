@@ -95,8 +95,11 @@ def validate_special(special, billing_method):
         else:
             msg += validate_integer(off, 0, 100)
     elif special_type == 'markdown':
-        if get_value(special, 'percentage') is None:
+        percentage = get_value(special, 'percentage')
+        if percentage is None:
             msg += 'Must provide percentage. '
+        else:
+            msg += validate_integer(percentage, 0, 100)
     else:
         msg += 'Invalid special type. '
 

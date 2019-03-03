@@ -170,6 +170,13 @@ def MakeHelpersTests(baseurl):
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
+        def test_validate_special_markdown_when_percentage_not_number_returns_error(self):
+            special = {
+                'type': 'markdown',
+                'percentage': 'aaa'
+            }
+            self.assertNotEqual(H.validate_special(special, 'unit'), '')
+
         def test_validate_special_buyAgetBforCoff_with_weight_item_returns_error(self):
             special = {
                 'type': 'buyAgetBforCoff',
