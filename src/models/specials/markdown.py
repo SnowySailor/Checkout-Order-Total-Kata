@@ -22,6 +22,6 @@ class Markdown:
         if self.limit is not None and self.limit < amount:
             amount = self.limit
         
-        # Return the original price minus the new price with the markdown
+        # Return the amount saved with the markdown
         savings = amount * (self.percentage/100) * item.price
         return savings
