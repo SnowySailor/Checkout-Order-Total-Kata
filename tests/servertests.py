@@ -1,10 +1,15 @@
 import unittest
 from src.models.item import Item
+from src.models.order import MakeOrder
 from src.database import DataStore
 import src.helpers as H
+import uuid
 
 def MakeServerTests(baseurl):
     class ServerTests(unittest.TestCase):
+        def setUp(self):
+            self.order_id = str(uuid.uuid4())
+
         # Calculating the savings from specials
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_1_amount_returns_0(self):
             special = {
@@ -317,9 +322,30 @@ def MakeServerTests(baseurl):
             savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, [], datastore)
             self.assertEqual(savings, 2.50)
 
+        def test_calculate_total_for_order_with_no_specials_and_4_items(self):
+            datastore = DataStore()
+            item  = self.create_item('soup', 2.00, 'unit', None, datastore)
+            item2 = self.create_item('peas', 1.78, 'unit', None, datastore)
+            item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
+            item4 = self.create_item('beef', 9.99, 'weight', None, datastore)
+            order = self.create_order(datastore)
+
+            order.add_item(item, 3)
+            order.add_item(item2, 1)
+            order.add_item(item3, 4.32)
+            order.add_item(item4, 9.34)
+
+            total = order.calculate_total()
+            self.assertEqual(total, 111.33)
+
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
             datastore.set('itemdetails:' + name, item)
             return item
+
+        def create_order(self, datastore):
+            order = MakeOrder(self.order_id, datastore)
+            datastore.set('orders:' + order.order_id, order)
+            return order
 
     return ServerTests

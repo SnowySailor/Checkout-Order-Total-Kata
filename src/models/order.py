@@ -49,5 +49,8 @@ def MakeOrder(new_order_id, datastore):
             # Round to two decimal places
             return round(total, 2)
 
+        def calculate_total(self):
+            return self.calculate_total_no_specials()
+
 
     return Order(new_order_id)
