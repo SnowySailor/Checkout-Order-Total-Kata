@@ -369,9 +369,4 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore.set('itemdetails:' + name, item)
             return item
 
-        def create_order(self, datastore):
-            order = MakeOrder(self.order_id, datastore)
-            datastore.set('orders:' + order.order_id, order)
-            return order
-
     return CalculateBestSavingsTests
