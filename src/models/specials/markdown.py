@@ -23,5 +23,5 @@ class Markdown:
             amount = self.limit
         
         # Return the original price minus the new price with the markdown
-        savings = (amount * item.price) - (amount * (self.percentage/100) * item.price)
+        savings = amount * (self.percentage/100) * item.price
         return savings
