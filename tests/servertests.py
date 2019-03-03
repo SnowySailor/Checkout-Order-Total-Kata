@@ -245,6 +245,20 @@ def MakeServerTests(baseurl):
             savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 9}, dict(), datastore)
             self.assertEqual(savings, (0.00, []))
 
+        def test_calculate_best_savings_for_AforB_with_10_for_5_with_9_items_limit_5_returns_0(self):
+            special = {
+                'type': 'AforB',
+                'buy': 10,
+                'for': 5.00,
+                'limit': 5
+            }
+
+            datastore = DataStore()
+            item  = self.create_item('soup', 2.00, 'unit', special, datastore)
+
+            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 9}, dict(), datastore)
+            self.assertEqual(savings, (0.00, []))
+
         def test_calculate_best_savings_for_markdown_with_50_off_with_2_items(self):
             special = {
                 'type': 'markdown',
