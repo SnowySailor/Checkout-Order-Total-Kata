@@ -47,5 +47,5 @@ class BuyAgetBforCoff:
 
         # Return the number of applications times the total percentage
         # discount off a single item times the price of a single item
-        savings = chunks * self.off * self.get * item.price
-        return savings
+        savings = chunks * (self.off/100) * self.get * item.price
+        return round(savings, 2)

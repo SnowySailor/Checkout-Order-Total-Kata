@@ -25,4 +25,5 @@ class GetEOLforAoff:
             if current_item_price > highest_cost and current_item_price <= max_cost:
                 highest_cost = current_item_price
 
-        return round(self.off/100 * highest_cost, 2)
+        savings = self.off/100 * highest_cost
+        return round(savings, 2)

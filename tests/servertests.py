@@ -11,11 +11,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 1,
                 'get': 2,
-                'off': 0.5
+                'off': 50
             }
-            item = Item('test', 5.00, 'unit', special)
+            
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 5.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 1}, [], datastore)
             self.assertEqual(savings, 0)
@@ -25,11 +25,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 1,
                 'get': 2,
-                'off': 0.5
+                'off': 50
             }
-            item = Item('test', 5.00, 'unit', special)
+            
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 5.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 5}, [], datastore)
             self.assertEqual(savings, 5.0)
@@ -39,11 +39,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 1,
                 'get': 2,
-                'off': 0.5
+                'off': 50
             }
-            item = Item('test', 5.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 5.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 6}, [], datastore)
             self.assertEqual(savings, 10.0)
@@ -53,11 +53,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 2,
                 'get': 1,
-                'off': 1.0
+                'off': 100
             }
-            item = Item('test', 6.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 6.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 2}, [], datastore)
             self.assertEqual(savings, 0)
@@ -67,11 +67,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 2,
                 'get': 1,
-                'off': 1.0
+                'off': 100
             }
-            item = Item('test', 6.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 6.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 3}, [], datastore)
             self.assertEqual(savings, 6.0)
@@ -81,11 +81,11 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 2,
                 'get': 1,
-                'off': 1.0
+                'off': 100
             }
-            item = Item('test', 6.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 6.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 7}, [], datastore)
             self.assertEqual(savings, 12.0)
@@ -95,12 +95,12 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 1,
                 'get': 1,
-                'off': 1.0,
+                'off': 100,
                 'limit': 2
             }
-            item = Item('test', 5.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 5.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 10}, [], datastore)
             self.assertEqual(savings, 5.0)
@@ -110,12 +110,12 @@ def MakeServerTests(baseurl):
                 'type': 'buyAgetBforCoff',
                 'buy': 1,
                 'get': 1,
-                'off': 1.0,
+                'off': 100,
                 'limit': 3
             }
-            item = Item('test', 5.00, 'unit', special)
+
             datastore = DataStore()
-            datastore.set('itemdetails:' + item.name, item)
+            item = self.create_item('test', 5.00, 'unit', special, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'test', 'amount': 10}, [], datastore)
             self.assertEqual(savings, 5.0)
@@ -129,9 +129,9 @@ def MakeServerTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('meat', 5.00, 'weight', special, datastore)
             item2 = self.create_item('soup', 4.50, 'unit', None, datastore)
+            
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 2}], datastore)
             self.assertEqual(savings, 4.50)
-
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
