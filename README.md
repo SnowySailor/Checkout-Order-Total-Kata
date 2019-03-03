@@ -138,15 +138,3 @@ Returns a JSON-encoded string with information about the order corresponding to 
 }
 ```
 In this example, there were only two items in the order. In reality, it could be up to several dozen.
-
-## TODO:
-* Come up with a way to efficiently calculate the order total including specials
-  * I noticed that when I checked out at the grocery store the other day, the specials were applied a few seconds after scanning my store card. I also noticed that not all of the price reductions were applied at the same time; one was applied, then a pause, then the second, then a pause, etc. The pauses between each special application got shorter and shorter as the specials were added. This tells me that there's some sort of incremental application of the specials going on and after each application, items that were a part of the special were removed from the possible items to apply future specials to.
-  * Optimal approach:
-    * Compute all permutations of all items and brute force the optimal special application
-    * This can be improved by only computing the permutations of all items that have a special on them because only the order in which the specials are applied matters when computing the total
-  * Greedy approach:
-    * Find the special that will save the customer the most money, then remove all items involved in that special and recursively apply the same algorithm until there are no more items left or no more specials on the items
-  * Smart approach:
-    * Use the optimal algorithm if there are fewer than 9 items with specials in the order and switch to a greedy approach if there are 9 or more items in the order
-
