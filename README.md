@@ -138,7 +138,6 @@ Returns a JSON-encoded string with information about the order corresponding to 
 In this example, there were only two items in the order. In reality, it could be up to several dozen.
 
 ## TODO:
-* Make sure that percentages and other various numbers in specials can't be negative or over 100 (for percentages)
 * Come up with a way to efficiently calculate the order total including specials
   * I noticed that when I checked out at the grocery store the other day, the specials were applied a few seconds after scanning my store card. I also noticed that not all of the price reductions were applied at the same time; one was applied, then a pause, then the second, then a pause, etc. The pauses between each special application got shorter and shorter as the specials were added. This tells me that there's some sort of incremental application of the specials going on and after each application, items that were a part of the special were removed from the possible items to apply future specials to.
   * Optimal approach:
