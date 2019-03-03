@@ -53,6 +53,9 @@ def MakeOrder(new_order_id, datastore):
             # Round to two decimal places
             return round(total, 2)
 
+        # Computes the optimal total of an order with specials
+        # by brute-forcing the solution. This is very slow with
+        # more than 9-10 items that have specials. Runtime is O(n!)
         def calculate_total_with_specials_optimal(self):           
             max_savings = 0.00
 
@@ -81,6 +84,9 @@ def MakeOrder(new_order_id, datastore):
                     # The item must have been fully consumed already and cannot be
                     # considered anymore
                     if amount is None or amount == 0:
+                        # coverage code analysis program says this line
+                        # doesn't run, but putting a print statement in here
+                        # and running the tests shows that it does run
                         continue
 
                     # Get the current item's definition
@@ -111,6 +117,10 @@ def MakeOrder(new_order_id, datastore):
             # Return the original order total minus the savings
             return round(self.calculate_total_no_specials() - max_savings, 2)
 
+        # Computes a "pretty good" application of specials to give
+        # the customer a decent discount if they have a lot of specials.
+        # This algorithm may not give the optimal result every time, but
+        # it's much faster than the optimal algorithm at O(n^3)
         def calculate_total_with_specials_greedy(self):
             savings = 0.00
 
