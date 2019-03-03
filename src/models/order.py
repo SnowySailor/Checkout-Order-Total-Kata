@@ -49,8 +49,29 @@ def MakeOrder(new_order_id, datastore):
             # Round to two decimal places
             return round(total, 2)
 
+        def calculate_total_with_specials(self):
+            savings = 0.00
+            for item, amount in self.items.items():
+                item_def = datastore.get('itemdetails:' + item)
+                if item_def.special is not None:
+                    savings += item_def.special.calculate_best_savings({'name': item, 'amount': amount}, self.items, datastore)
+            return round(self.calculate_total_no_specials() - savings, 2)
+
         def calculate_total(self):
-            return self.calculate_total_no_specials()
+            # Figure out if any items have a special
+            has_special = False
+            for item, amount in self.items.items():
+                item_def = datastore.get('itemdetails:' + item)
+                if item_def.special is not None:
+                    has_special = True
+                    break
+
+            # If an item has a special, compute the total with specials
+            # else return the standard computation of the total
+            if has_special:
+                return self.calculate_total_with_specials()
+            else:
+                return self.calculate_total_no_specials()
 
 
     return Order(new_order_id)

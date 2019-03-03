@@ -136,6 +136,8 @@ def MakeClientTests(baseurl):
             item = {'name': 'pasta', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'AforB', 'buy': 5, 'for': 3.00, 'limit': 10}}
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             self.assertEqual(r.status_code, 200)
+            r = requests.get(baseurl + '/itemdetails?name=pasta')
+            self.assertEqual(r.text, json.dumps(item))
 
         def test_post_create_item_with_buyAgetBforCoff_special_saves_special(self):
             item = {'name': 'chicken', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 2, 'off': 50.0}}
