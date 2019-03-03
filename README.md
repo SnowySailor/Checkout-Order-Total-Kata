@@ -13,6 +13,8 @@ Tests are located in the `tests` directory and are separated into three files. T
 
 To run this application's tests, run the application with the `--test` flag like so: `python3 main.py --test`. All tests will run and then the application will shut down.
 
+This application has 100% test coverage with [coverage.py](https://coverage.readthedocs.io/en/v4.5.x/).
+
 ## Features
 ### Create or modify an item
 POST to `/createitem` to create a new item in the system. This could be a box of pasta, a can of soup, or fish. Each item can have a single special active at any given time. To update an item's price, add or remove a special, or alter a special, call `/getitem` to get the item's current definition as JSON, alter the item's definition, and then POST it to `/createitem` and the item will be updated.

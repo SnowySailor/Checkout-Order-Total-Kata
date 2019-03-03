@@ -156,3 +156,10 @@ def merge_item_dict_lists_to_dict(*lists):
             amount  = get_value(item, 'amount')
             d[name] = amount  
     return d
+
+def has_specials(item_dict, datastore):
+    for item, _ in item_dict.items():
+        item_def = datastore.get('itemdetails:' + item)
+        if item_def.special is not None:
+            return True
+    return False

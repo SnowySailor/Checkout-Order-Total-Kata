@@ -1,6 +1,6 @@
 import json
 
-from src.helpers import get_value, flatten, merge_item_dict_lists_to_dict
+from src.helpers import get_value, flatten, merge_item_dict_lists_to_dict, has_specials
 import copy
 import itertools
 
@@ -32,7 +32,7 @@ def MakeOrder(new_order_id, datastore):
             d = dict()
             d['id'] = self.order_id
             d['total_without_specials'] = self.calculate_total_no_specials()
-            d['total_with_specials'] = self.calculate_total_with_specials()
+            d['total_with_specials'] = self.calculate_total()
             d['items'] = list()
             # For each item and its amount in the order, add the info
             # to the list of items in the order for serialization
@@ -53,24 +53,27 @@ def MakeOrder(new_order_id, datastore):
             # Round to two decimal places
             return round(total, 2)
 
-        def calculate_total_with_specials(self):           
+        def calculate_total_with_specials_optimal(self):           
             max_savings = 0.00
-            # print()
-            # print()
 
+            # Get all permutations of special items and a list of the remaining items that don't
+            # have specials
             (specials_perms, non_special_items) = self.get_special_permutations_and_remainder_items()
 
+            # Iterate over each permutation to see which special application order
+            # yields the most savings
             for special_perm_instance in specials_perms:
                 instance_savings = 0.00
 
                 # Convert the tuple into a list of items
                 special_perm_instance = list(special_perm_instance)
                 # Compute the current item list instance
-                instance_items = flatten(special_perm_instance, non_special_items)
+                instance_items      = flatten(special_perm_instance, non_special_items)
                 instance_items_dict = merge_item_dict_lists_to_dict(special_perm_instance, non_special_items)
 
                 # We want to use the list to iterate over because it ensures order
-                # whereas the dict does not
+                # whereas the dict does not. This will calculate the amount saved by
+                # a given special permutation
                 for item_dict in instance_items:
                     item   = get_value(item_dict, 'name')
                     amount = get_value(instance_items_dict, item)
@@ -82,47 +85,98 @@ def MakeOrder(new_order_id, datastore):
 
                     # Get the current item's definition
                     item_def = datastore.get('itemdetails:' + item)
+
+                    # Only compute savings for the special if the item has a special
                     if item_def.special is not None:
                         # Find the amount the customer can save from this item's special
                         # and which items are involved in the special
                         (new_savings, items_consumed) = item_def.special.calculate_best_savings(
                             {'name': item, 'amount': amount}, instance_items_dict, datastore)
-                        # print('saved', new_savings, 'with', items_consumed)
 
                         # Account for the savings
                         instance_savings += new_savings
-                        # Remove any consumed items from the copy of the order's items
+                        # Remove any consumed items from the instance item dict
                         for item_consumed in items_consumed:
                             consumed_name = get_value(item_consumed, 'name')
                             instance_items_dict[consumed_name] -= get_value(item_consumed, 'amount')
                             # If all of this item has been consumed by specials, remove it from the
-                            # possible items
+                            # possible items to consume or be used in the future
                             if instance_items_dict[consumed_name] == 0:
                                 del instance_items_dict[consumed_name]
 
                 # Update the maximum savings if this instance saved the customer the most money
                 if instance_savings > max_savings:
-                    # print('new best (beat', max_savings, 'with', instance_savings, ')', instance_items)
                     max_savings = instance_savings
 
             # Return the original order total minus the savings
             return round(self.calculate_total_no_specials() - max_savings, 2)
 
+        def calculate_total_with_specials_greedy(self):
+            savings = 0.00
+
+            # Create a copy of self.items so we don't have to worry about
+            # modifying it
+            items_copy = copy.deepcopy(self.items)
+
+            # Want to continue this greedy algorithm until there are no more
+            # specials left to yield savings
+            while has_specials(items_copy, datastore):
+                best_special_savings  = 0.00
+                best_special_consumed = []
+
+                # Find the special that will save the customer the most money
+                for item, amount in items_copy.items():
+                    item_def = datastore.get('itemdetails:' + item)
+                    if item_def.special is not None:
+                        (savings, items_consumed) = item_def.special.calculate_best_savings(
+                            {'name': item, 'amount': amount}, items_copy, datastore)
+
+                        # Check to see if the current special would give the customer
+                        # the greatest savings
+                        if savings > best_special_savings:
+                            best_special_savings  = savings
+                            best_special_consumed = items_consumed
+
+                # If there was no special that saved the customer money, then
+                # there are no more specials that can be applied and we are done
+                if best_special_savings == 0.00:
+                    break
+
+                # print('saved (', best_special_savings ,') with', best_special_consumed)
+                # Remove all items that were consumed by the best special
+                for item_consumed in best_special_consumed:
+                    consumed_name = get_value(item_consumed, 'name')
+                    items_copy[consumed_name] -= get_value(item_consumed, 'amount')
+                    # If all of this item has been consumed by specials, remove it from the
+                    # possible items to consume or be used in the future
+                    if items_copy[consumed_name] == 0:
+                        del items_copy[consumed_name]
+
+                # Increment the savings by the amount that the best special saved
+                savings += best_special_savings
+
+            return round(self.calculate_total_no_specials() - savings, 2)
+
         def calculate_total(self):
             # Figure out if any items have a special
-            has_special = False
+            special_count = 0
             for item, amount in self.items.items():
                 item_def = datastore.get('itemdetails:' + item)
                 if item_def.special is not None:
-                    has_special = True
-                    break
+                    special_count += 1
 
-            # If an item has a special, compute the total with specials
-            # else return the standard computation of the total
-            if has_special:
-                return self.calculate_total_with_specials()
-            else:
+            # If an order has more than 8 specials, it's too expensive
+            # to compute so we just want to use a greedy algorithm
+            # instead. If the order has between 1-8 specials we want
+            # to use the optimal approach. If the order has no specials,
+            # we can use the straightforward approach
+            if special_count == 0:
                 return self.calculate_total_no_specials()
+            elif special_count > 8:
+                return self.calculate_total_with_specials_greedy()
+            else:
+                return self.calculate_total_with_specials_optimal()
+                
 
         def get_special_permutations_and_remainder_items(self):
             specials = []
