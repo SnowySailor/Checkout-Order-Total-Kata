@@ -87,6 +87,8 @@ def validate_special(special, billing_method):
             off = parse_int(off, None)
             if off is None:
                 msg += 'Unable to parse off value to integer. '
+            elif off < 0 or off > 100:
+                msg += 'Off value must be between 0 and 100'
     elif special_type == 'markdown':
         if get_value(special, 'percentage') is None:
             msg += 'Must provide percentage. '

@@ -202,4 +202,11 @@ def MakeHelpersTests(baseurl):
             }
             self.assertNotEqual(H.validate_special(special, 'weight'), '')
 
+        def test_validate_special_getEOLforAoff_when_off_negative_returns_error(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': -1
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
+
     return HelpersTests
