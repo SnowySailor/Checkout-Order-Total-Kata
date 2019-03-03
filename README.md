@@ -1,5 +1,7 @@
 # Checkout Order Total Kata
 
+Here is a link to the original task description: https://github.com/PillarTechology/kata-checkout-order-total
+
 ## Requirements
 - Python 3.6
 
