@@ -131,7 +131,7 @@ def MakeServerTests(baseurl):
             item2 = self.create_item('soup', 4.50, 'unit', None, datastore)
             
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 2}], datastore)
-            self.assertEqual(savings, 4.50)
+            self.assertEqual(savings, 2.25)
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_items(self):
             special = {
@@ -144,7 +144,7 @@ def MakeServerTests(baseurl):
             item2 = self.create_item('soup', 5.00, 'unit', None, datastore)
 
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 3}], datastore)
-            self.assertEqual(savings, 5.00)
+            self.assertEqual(savings, 2.50)
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_single_item(self):
             special = {
@@ -158,6 +158,20 @@ def MakeServerTests(baseurl):
 
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}], datastore)
             self.assertEqual(savings, 0.00)
+
+        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_single_item(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': 50
+            }
+
+            datastore = DataStore()
+            item  = self.create_item('meat', 5.00, 'weight', special, datastore)
+            item2 = self.create_item('soup', 10.00, 'unit', None, datastore)
+            item3 = self.create_item('pasta', 1.00, 'unit', None, datastore)
+
+            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}, {'name': 'pasta', 'amount': 10}], datastore)
+            self.assertEqual(savings, 5.00)
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)

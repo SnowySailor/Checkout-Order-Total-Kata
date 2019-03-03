@@ -49,7 +49,7 @@ There are four specials that are supported:
   }
   ```
 
-* Buy an item and get any other item of equal or lesser value for X off. This special can not have a limit. As an example, if a customer buys 5lbs of ground beef for $10, they can get any other item in the store that is $10 or less for 50% off. Example JSON:
+* Buy an item and get any other single item of equal or lesser value for X off. This special can not have a limit. As an example, if a customer buys 5lbs of ground beef for $10, they can get any other item in the store that is $10 or less for 50% off. Example JSON:
   ```json
   {
     "type": "getEOLforAoff",
