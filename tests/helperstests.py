@@ -239,4 +239,7 @@ def MakeHelpersTests(baseurl):
         def test_validate_float_with_higher_value_than_expected_returns_error(self):
             self.assertNotEqual(H.validate_float(101, 0, 100), '')
 
+        def test_validate_float_with_lower_value_than_expected_returns_error(self):
+            self.assertNotEqual(H.validate_float(-100, 0, 100), '')
+
     return HelpersTests
