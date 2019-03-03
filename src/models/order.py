@@ -74,6 +74,11 @@ def MakeOrder(new_order_id, datastore):
                     item   = get_value(item_dict, 'name')
                     amount = get_value(instance_items_dict, item)
 
+                    # The item must have been fully consumed already and cannot be
+                    # considered anymore
+                    if amount is None or amount == 0:
+                        continue
+
                     # Get the current item's definition
                     item_def = datastore.get('itemdetails:' + item)
                     if item_def.special is not None:
