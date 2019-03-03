@@ -92,7 +92,7 @@ def MakeOrder(new_order_id, datastore):
                         # and which items are involved in the special
                         (new_savings, items_consumed) = item_def.special.calculate_best_savings(
                             {'name': item, 'amount': amount}, instance_items_dict, datastore)
-
+                        
                         # Account for the savings
                         instance_savings += new_savings
                         # Remove any consumed items from the instance item dict
@@ -142,7 +142,6 @@ def MakeOrder(new_order_id, datastore):
                 if best_special_savings == 0.00:
                     break
 
-                # print('saved (', best_special_savings ,') with', best_special_consumed)
                 # Remove all items that were consumed by the best special
                 for item_consumed in best_special_consumed:
                     consumed_name = get_value(item_consumed, 'name')
