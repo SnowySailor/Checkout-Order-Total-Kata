@@ -119,7 +119,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
             # Pull out all of the fields we need
             name           = get_value(item_dict, 'name')
-            price          = get_value(item_dict, 'price', 0)
+            price          = parse_float(get_value(item_dict, 'price', 0))
             billing_method = get_value(item_dict, 'billing_method', '')
             special        = get_value(item_dict, 'special')
 
@@ -127,7 +127,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             msg = ''
             if name is None or name == '':
                 msg += 'Must provide name. '
-            if price <= 0:
+            if price is None or price <= 0:
                 msg += 'Must provide price and must be positive. '
 
             if msg != '':
