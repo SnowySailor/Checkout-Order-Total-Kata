@@ -80,8 +80,13 @@ def validate_special(special, billing_method):
     elif special_type == 'getEOLforAoff':
         if billing_method != 'weight':
             msg += 'Special can only apply to items billed by weight. '
+        off = get_value(special, 'off')
         if get_value(special, 'off') is None:
             msg += 'Must provide off. '
+        else:
+            off = parse_int(off, None)
+            if off is None:
+                msg += 'Unable to parse off value to integer. '
     elif special_type == 'markdown':
         if get_value(special, 'percentage') is None:
             msg += 'Must provide percentage. '

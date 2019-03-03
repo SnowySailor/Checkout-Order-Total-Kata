@@ -138,4 +138,68 @@ def MakeHelpersTests(baseurl):
             json_str = ''
             self.assertEqual(H.parse_json(json_str), None)
 
+
+        # Validating specials
+        def test_validate_special_AforB_with_weight_item_returns_error(self):
+            special = {
+                'type': 'AforB',
+                'buy': 5,
+                'for': 3.00
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
+
+        def test_validate_special_AforB_with_unit_item_returns_ok(self):
+            special = {
+                'type': 'AforB',
+                'buy': 5,
+                'for': 3.00
+            }
+            self.assertEqual(H.validate_special(special, 'unit'), '')
+
+        def test_validate_special_markdown_with_weight_item_returns_ok(self):
+            special = {
+                'type': 'markdown',
+                'percentage': 50
+            }
+            self.assertEqual(H.validate_special(special, 'weight'), '')
+
+        def test_validate_special_markdown_with_unit_item_returns_ok(self):
+            special = {
+                'type': 'markdown',
+                'percentage': 50
+            }
+            self.assertEqual(H.validate_special(special, 'unit'), '')
+
+        def test_validate_special_buyAgetBforCoff_with_weight_item_returns_error(self):
+            special = {
+                'type': 'buyAgetBforCoff',
+                'buy': 1,
+                'get': 4,
+                'off': 25
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
+
+        def test_validate_special_buyAgetBforCoff_with_unit_item_returns_ok(self):
+            special = {
+                'type': 'buyAgetBforCoff',
+                'buy': 1,
+                'get': 4,
+                'off': 25
+            }
+            self.assertEqual(H.validate_special(special, 'unit'), '')
+
+        def test_validate_special_getEOLforAoff_with_unit_item_returns_error(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': 50
+            }
+            self.assertNotEqual(H.validate_special(special, 'unit'), '')
+
+        def test_validate_special_getEOLforAoff_when_off_is_not_number_returns_error(self):
+            special = {
+                'type': 'getEOLforAoff',
+                'off': 'notanumber'
+            }
+            self.assertNotEqual(H.validate_special(special, 'weight'), '')
+
     return HelpersTests
