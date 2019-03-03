@@ -71,7 +71,7 @@ Used to create a new item definition in the application. Accepts JSON in the POS
 ```json
 {
   "name": "{item_name}",
-  "price": "item_price_per_unit",
+  "price": "item_price_per_unit_as_number",
   "billing_method": "{either 'weight' or 'unit'}",
   "special": {"special": "json"}
 }
@@ -91,7 +91,7 @@ Adds an item to an order given that both the item and order already exist. Accep
 {
   "order_id": "{the_order_id}",
   "item": "{the_items_name}",
-  "amount": "number_or_weight_of_added_items"
+  "amount": "number_or_weight_of_added_items_as_number"
 }
 ```
 The `"amount"` field is optional. It will automatically default to `1` for items with a `billing_method` of `unit`, and `1.0` for items with a `billing_method` of `weight`.
@@ -103,7 +103,7 @@ Removed an item from an order given that both the item and order already exist. 
 {
   "order_id": "{the_order_id}",
   "item": "{the_items_name}",
-  "amount": "number_or_weight_of_removed_items"
+  "amount": "number_or_weight_of_removed_items_as_number"
 }
 ```
 The `"amount"` field is optional. It will automatically default to `1` for items with a `billing_method` of `unit`, and `1.0` for items with a `billing_method` of `weight`. If the `"amount"` for the given `"item"` is greater than or equal to the amount of that item already on the order, the item is completely removed from the order.
@@ -128,11 +128,11 @@ Returns a JSON-encoded string with information about the order corresponding to 
   "items": [
     {
       "name": "{item_1_name}",
-      "amount": "item_1_ammount"
+      "amount": "item_1_ammount_as_number"
     },
     {
       "name": "{item_2_name}",
-      "amount": "item_2_ammount"
+      "amount": "item_2_ammount_as_number"
     }
   ]
 }
