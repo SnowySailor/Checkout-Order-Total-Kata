@@ -170,8 +170,21 @@ def MakeServerTests(baseurl):
             item2 = self.create_item('soup', 10.00, 'unit', None, datastore)
             item3 = self.create_item('pasta', 1.00, 'unit', None, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}, {'name': 'pasta', 'amount': 10}], datastore)
+            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}, {'name': 'pasta', 'amount': 15}], datastore)
             self.assertEqual(savings, 5.00)
+
+        def test_calculate_best_savings_for_AforB_with_2_for_5_with_2_items(self):
+            special = {
+                'type': 'AforB',
+                'buy': 2,
+                'for': 5.00
+            }
+
+            datastore = DataStore()
+            item  = self.create_item('soup', 3.00, 'unit', special, datastore)
+
+            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 2}, [], datastore)
+            self.assertEqual(savings, 1.00)
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
