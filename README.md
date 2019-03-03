@@ -71,7 +71,7 @@ Used to create a new item definition in the application. Accepts JSON in the POS
 ```json
 {
   "name": "{item_name}",
-  "price": item_price_per_unit,
+  "price": "item_price_per_unit",
   "billing_method": "{either 'weight' or 'unit'}",
   "special": {"special": "json"}
 }
@@ -91,7 +91,7 @@ Adds an item to an order given that both the item and order already exist. Accep
 {
   "order_id": "{the_order_id}",
   "item": "{the_items_name}",
-  "amount": number_or_weight_of_added_items
+  "amount": "number_or_weight_of_added_items"
 }
 ```
 The `"amount"` field is optional. It will automatically default to `1` for items with a `billing_method` of `unit`, and `1.0` for items with a `billing_method` of `weight`.
@@ -103,7 +103,7 @@ Removed an item from an order given that both the item and order already exist. 
 {
   "order_id": "{the_order_id}",
   "item": "{the_items_name}",
-  "amount": number_or_weight_of_removed_items
+  "amount": "number_or_weight_of_removed_items"
 }
 ```
 The `"amount"` field is optional. It will automatically default to `1` for items with a `billing_method` of `unit`, and `1.0` for items with a `billing_method` of `weight`. If the `"amount"` for the given `"item"` is greater than or equal to the amount of that item already on the order, the item is completely removed from the order.
@@ -119,20 +119,20 @@ Create a new order to hold items for a customer. Accepts JSON in the POST body o
 The `"id"` must be unique. It is suggested that a 128-bit UUID is used to prevent collisions from occurring. An order with a given `"id"` can only be created once and cannot be deleted.
 
 ---
-### `/getorder?order_id={order_id}`
+### `/getorder?id={order_id}`
 Returns a JSON-encoded string with information about the order corresponding to the order id provided. The JSON returned will be of the following form:
 ```json
 {
   "order_id": "{the_order_id}",
-  "total": pre_tax_order_total,
+  "total": "pre_tax_order_total",
   "items": [
     {
       "name": "{item_1_name}",
-      "amount": item_1_ammount
+      "amount": "item_1_ammount"
     },
     {
       "name": "{item_2_name}",
-      "amount": item_2_ammount
+      "amount": "item_2_ammount"
     }
   ]
 }
