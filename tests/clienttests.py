@@ -220,7 +220,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 15.00
+            expected['total_without_specials'] = 15.00
+            expected['total_with_specials'] = 15.00
             expected['items'] = [{'name': 'pie', 'amount': 3}]
 
             self.assertEqual(r.text, json.dumps(expected))
@@ -232,7 +233,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 12.15
+            expected['total_without_specials'] = 12.15
+            expected['total_with_specials'] = 12.15
             expected['items'] = [{'name': 'pie', 'amount': 3}]
 
             self.assertEqual(r.text, json.dumps(expected))
@@ -332,7 +334,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 5.75
+            expected['total_without_specials'] = 5.75
+            expected['total_with_specials'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -351,7 +354,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 37.95
+            expected['total_without_specials'] = 37.95
+            expected['total_with_specials'] = 37.95
             expected['items'] = [{'name': 'cheese', 'amount': 6.6}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -428,7 +432,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 0.00
+            expected['total_without_specials'] = 0.00
+            expected['total_with_specials'] = 0.00
             expected['items'] = []
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
@@ -447,7 +452,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 6.00
+            expected['total_without_specials'] = 6.00
+            expected['total_with_specials'] = 6.00
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk', 'amount': 1}
@@ -466,7 +472,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 6.00
+            expected['total_without_specials'] = 6.00
+            expected['total_with_specials'] = 6.00
             expected['items'] = [{'name': 'milk', 'amount': 4}]
 
             post_data = {'order_id': self.order_id, 'item': 'milk'}
@@ -494,7 +501,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 1.50
+            expected['total_without_specials'] = 1.50
+            expected['total_with_specials'] = 1.50
             expected['items'] = [{'name': 'milk', 'amount': 1}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
@@ -511,7 +519,8 @@ def MakeClientTests(baseurl):
 
             expected = dict()
             expected['id'] = self.order_id
-            expected['raw_total'] = 5.75
+            expected['total_without_specials'] = 5.75
+            expected['total_with_specials'] = 5.75
             expected['items'] = [{'name': 'cheese', 'amount': 1.0}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
