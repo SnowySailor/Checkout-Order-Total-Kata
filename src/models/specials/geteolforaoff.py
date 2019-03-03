@@ -17,22 +17,35 @@ class GetEOLforAoff:
         item_def = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
         max_cost = get_value(applied_to_item, 'amount') * item_def.price
 
-        # Find the highest cost item that is less than the max_cost
+        # Find the highest cost item that is less than or equal to the max_cost
         best_cost = 0
         best_item = None
         for item, amount in items.items():
+            # Skip the item we're applying the special to
+            if item == item_def.name:
+                continue
+
             # Get the definition for the item we're currently looking at
             current_item_def = datastore.get('itemdetails:' + item)
 
             # Determine if it's better than any previous item we've seen
-            if current_item_def.price > best_cost and current_item_def.price <= max_cost\
-                    and current_item_def.billing_method.value == 'unit':
-                best_cost = current_item_def.price
-                best_item = {'name': item, 'amount': 1}
+            # We can allow weighted items, but if we do the special must consume the
+            # entire weight
+            if current_item_def.billing_method.value == 'weight':
+                cost = current_item_def.price * amount
+                if current_item_def.price * amount <= max_cost and cost > best_cost:
+                    best_cost = cost
+                    best_item = {'name': item, 'amount': amount}
+            elif current_item_def.billing_method.value == 'unit':
+                if current_item_def.price <= max_cost and current_item_def.price > best_cost:
+                    best_cost = current_item_def.price
+                    best_item = {'name': item, 'amount': 1}
 
+        # Calculate the savings and build the list of consumed items
         savings = self.off/100 * best_cost
         consumed_items = []
         if best_item is not None:
             consumed_items.append(best_item)
             consumed_items.append({'name': item_def.name, 'amount': get_value(applied_to_item, 'amount')})
+
         return (round(savings, 2), consumed_items)

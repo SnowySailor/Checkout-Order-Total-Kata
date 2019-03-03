@@ -456,7 +456,25 @@ def MakeServerTests(baseurl):
             order.add_item(item4, 9.34)
 
             total = order.calculate_total()
-            self.assertEqual(total, 110.94)
+            self.assertEqual(total, 104.76)
+
+        def test_calculate_total_for_order_with_one_getEOLforAoff_special_and_markdown_and_4_items_2(self):
+            datastore = DataStore()
+            special1 = {'type': 'getEOLforAoff', 'off': 25}
+            special2 = {'type': 'markdown', 'percentage': 50}
+            item  = self.create_item('soup', 2.00, 'unit', special2, datastore)
+            item2 = self.create_item('peas', 1.78, 'unit', None, datastore)
+            item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
+            item4 = self.create_item('beef', 9.99, 'weight', special1, datastore)
+            order = self.create_order(datastore)
+
+            order.add_item(item, 4)
+            order.add_item(item2, 1)
+            order.add_item(item3, 4.32)
+            order.add_item(item4, 9.34)
+
+            total = order.calculate_total()
+            self.assertEqual(total, 106.77)
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
