@@ -1,7 +1,8 @@
 import json
 
-from src.helpers import get_value
+from src.helpers import get_value, flatten, merge_item_dict_lists_to_dict
 import copy
+import itertools
 
 def MakeOrder(new_order_id, datastore):
     class Order:
@@ -51,32 +52,55 @@ def MakeOrder(new_order_id, datastore):
             # Round to two decimal places
             return round(total, 2)
 
-        def calculate_total_with_specials(self):
-            savings = 0.00
-            # Create a copy of the items dict so we don't have to worry
-            # about updating the self.items dict
-            items_copy = copy.deepcopy(self.items)
+        def calculate_total_with_specials(self):           
+            max_savings = 0.00
+            # print()
+            # print()
 
-            for key in items_copy.keys():
-                item   = key
-                amount = items_copy[key]
+            (specials_perms, non_special_items) = self.get_special_permutations_and_remainder_items()
 
-                # Get the current item's definition
-                item_def = datastore.get('itemdetails:' + item)
-                if item_def.special is not None:
-                    # Find the amount the customer can save from this item's special
-                    # and which items are involved in the special
-                    (new_savings, items_consumed) = item_def.special.calculate_best_savings(
-                        {'name': item, 'amount': amount}, items_copy, datastore)
+            for special_perm_instance in specials_perms:
+                instance_savings = 0.00
 
-                    # Account for the savings
-                    savings += new_savings
-                    # Remove any consumed items from the copy of the order's items
-                    for item_consumed in items_consumed:
-                        items_copy[get_value(item_consumed, 'name')] -= get_value(item_consumed, 'amount')
+                # Convert the tuple into a list of items
+                special_perm_instance = list(special_perm_instance)
+                # Compute the current item list instance
+                instance_items = flatten(special_perm_instance, non_special_items)
+                instance_items_dict = merge_item_dict_lists_to_dict(special_perm_instance, non_special_items)
+
+                # We want to use the list to iterate over because it ensures order
+                # whereas the dict does not
+                for item_dict in instance_items:
+                    item   = get_value(item_dict, 'name')
+                    amount = get_value(instance_items_dict, item)
+
+                    # Get the current item's definition
+                    item_def = datastore.get('itemdetails:' + item)
+                    if item_def.special is not None:
+                        # Find the amount the customer can save from this item's special
+                        # and which items are involved in the special
+                        (new_savings, items_consumed) = item_def.special.calculate_best_savings(
+                            {'name': item, 'amount': amount}, instance_items_dict, datastore)
+                        # print('saved', new_savings, 'with', items_consumed)
+
+                        # Account for the savings
+                        instance_savings += new_savings
+                        # Remove any consumed items from the copy of the order's items
+                        for item_consumed in items_consumed:
+                            consumed_name = get_value(item_consumed, 'name')
+                            instance_items_dict[consumed_name] -= get_value(item_consumed, 'amount')
+                            # If all of this item has been consumed by specials, remove it from the
+                            # possible items
+                            if instance_items_dict[consumed_name] == 0:
+                                del instance_items_dict[consumed_name]
+
+                # Update the maximum savings if this instance saved the customer the most money
+                if instance_savings > max_savings:
+                    # print('new best (beat', max_savings, 'with', instance_savings, ')', instance_items)
+                    max_savings = instance_savings
 
             # Return the original order total minus the savings
-            return round(self.calculate_total_no_specials() - savings, 2)
+            return round(self.calculate_total_no_specials() - max_savings, 2)
 
         def calculate_total(self):
             # Figure out if any items have a special
@@ -93,5 +117,24 @@ def MakeOrder(new_order_id, datastore):
                 return self.calculate_total_with_specials()
             else:
                 return self.calculate_total_no_specials()
+
+        def get_special_permutations_and_remainder_items(self):
+            specials = []
+            non_specials = []
+            # Separate the order's items into items with specials and
+            # items without specials
+            for item, amount in self.items.items():
+                item_def = datastore.get('itemdetails:' + item)
+
+                item_dict = {'name': item, 'amount': amount}
+                if item_def.special is not None:
+                    specials.append(item_dict)
+                else:
+                    non_specials.append(item_dict)
+
+            # Compute all the permutations of the specials
+            specials_perms = list(itertools.permutations(specials))
+            # Return the permutations and the remaining non-special items
+            return (specials_perms, non_specials)
 
     return Order(new_order_id)

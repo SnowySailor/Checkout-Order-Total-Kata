@@ -482,21 +482,21 @@ def MakeServerTests(baseurl):
             special2 = {'type': 'markdown', 'percentage': 50}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
 
-            item  = self.create_item('soup', 2.00, 'unit', special3, datastore)
-            item2 = self.create_item('peas', 1.78, 'unit', special2, datastore)
+            item  = self.create_item('soup'   , 2.00, 'unit', special3, datastore)
+            item2 = self.create_item('peas'   , 1.78, 'unit', None, datastore)
             item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
-            item4 = self.create_item('beef', 9.99, 'weight', special1, datastore)
-            item5 = self.create_item('cheese', 5.99, 'unit', None, datastore)
+            item4 = self.create_item('beef'   , 9.99, 'weight', special1, datastore)
+            item5 = self.create_item('cheese' , 8.00, 'unit', special2, datastore)
             order = self.create_order(datastore)
 
-            order.add_item(item, 4)
+            order.add_item(item , 4)
             order.add_item(item2, 1)
             order.add_item(item3, 1.32)
             order.add_item(item4, 9.34)
             order.add_item(item5, 2)
 
             total = order.calculate_total()
-            self.assertEqual(total, 114.81)
+            self.assertEqual(total, 112.44)
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)

@@ -135,3 +135,24 @@ def validate_float(i, low = None, high = None):
     elif high is not None and i > high:
         return 'Value must be less than or equal to {high}. '
     return ''
+
+def flatten(*lists):
+    ret = list()
+    # Iterate over the lists in the arguments
+    for l in lists:
+        # Iterate over the items in the list
+        for item in l:
+            ret.append(item)
+    return ret
+
+def merge_item_dict_lists_to_dict(*lists):
+    d = dict()
+    # Iterate over all lists in the arguments
+    for l in lists:
+        # Iterate over the dicts in the list and add
+        # each item to the master dict
+        for item in l:
+            name    = get_value(item, 'name')
+            amount  = get_value(item, 'amount')
+            d[name] = amount  
+    return d
