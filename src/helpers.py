@@ -1,6 +1,7 @@
 from cgi import parse_header, parse_multipart
 from urllib.parse import parse_qsl, urlparse
 import json
+import sys
 
 def is_in_list(l, v):
     if l is None:
@@ -86,4 +87,10 @@ def validate_special(special, billing_method):
             msg += 'Must provide percentage. '
     else:
         msg += 'Invalid special type. '
+
+    # Limit validation
+    limit = parse_int(get_value(special, 'limit'), None)
+    if limit is not None and limit <= 0:
+        msg += 'Limit must be greater than 0. '
+
     return msg

@@ -197,6 +197,11 @@ def MakeClientTests(baseurl):
             r = requests.get(baseurl + '/itemdetails?name=beans')
             self.assertEqual(r.text, json.dumps(item))
 
+        def test_post_create_item_with_markdown_special_with_negative_limit_returns_400(self):
+            item = {'name': 'beans', 'price': 2.99, 'billing_method': 'unit', 'special': {'type': 'markdown', 'percentage': 50.0, 'limit': -4}}
+            r = requests.post(baseurl + '/createitem', data=json.dumps(item))
+            self.assertEqual(r.status_code, 400)
+
         def test_post_create_item_when_item_already_exists_it_is_overwritten_and_orders_totals_update(self):
             first_item = {'name': 'pie', 'price': 5.00, 'billing_method': 'unit'}
             second_item = {'name': 'pie', 'price': 4.05, 'billing_method': 'unit'}

@@ -23,7 +23,8 @@ There are four specials that are supported:
   ```json
   {
     "type": "markdown",
-    "percentage": 50
+    "percentage": 50,
+    "limit": 5
   }
   ```
 
@@ -33,7 +34,8 @@ There are four specials that are supported:
     "type": "buyAgetBforCoff",
     "buy": 1,
     "get": 2,
-    "off": 50
+    "off": 50,
+    "limit": 7
   }
   ```
 
@@ -42,7 +44,8 @@ There are four specials that are supported:
   {
     "type": "AforB",
     "buy": 5,
-    "for": 3.00
+    "for": 3.00,
+    "limit": 10
   }
   ```
 

@@ -128,7 +128,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             if name is None or name == '':
                 msg += 'Must provide name. '
             if price <= 0:
-                msg += 'Must provide price. '
+                msg += 'Must provide price and must be positive. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
