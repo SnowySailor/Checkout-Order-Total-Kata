@@ -164,7 +164,7 @@ def MakeServerTests(baseurl):
             savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, [{'name': 'soup', 'amount': 1}], datastore)
             self.assertEqual(savings, 0.00)
 
-        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_single_item(self):
+        def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_two_other_items(self):
             special = {
                 'type': 'getEOLforAoff',
                 'off': 50
