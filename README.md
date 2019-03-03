@@ -9,7 +9,7 @@ Here is a link to the original task description: https://github.com/PillarTechno
 Clone this repository onto your machine and `cd` into it via the command line. Run `python3 main.py` to start the application.
 
 ## Testing
-Application is being written and tested on Ubuntu 18.04 with the Python 3.6.5 interpreter that comes pre-installed.
+Application is being written and tested on Ubuntu 18.04 with the Python 3.6.5 interpreter that comes pre-installed. It was also tested on macOS 10.12.6 with the Python 3.6.5 interpreter from Homebrew.
 
 Tests are located in the `tests` directory and are separated into three files. The helpers tests are for functions defined in the `src/helpers.py` file. The server tests are for functions that are used on the server side to compute values. The client tests are for requests that a client would run to alter the state of the application.
 
