@@ -233,4 +233,7 @@ def MakeHelpersTests(baseurl):
             }
             self.assertNotEqual(H.validate_special(special, 'weight'), '')
 
+        def test_validate_integer_with_higher_value_than_expected_returns_error(self):
+            self.assertNotEqual(H.validate_integer(101, 0, 100), '')
+
     return HelpersTests
