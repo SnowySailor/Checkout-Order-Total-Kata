@@ -24,4 +24,4 @@ class Markdown:
         
         # Return the amount saved with the markdown
         savings = amount * (self.percentage/100) * item.price
-        return savings
+        return (savings, [{'name': item.name, 'amount': amount}])

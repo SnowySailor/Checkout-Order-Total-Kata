@@ -19,14 +19,20 @@ class GetEOLforAoff:
 
         # Find the highest cost item that is less than the max_cost
         best_cost = 0
-        for item in items:
+        best_item = None
+        for item, amount in items.items():
             # Get the definition for the item we're currently looking at
-            current_item_def = datastore.get('itemdetails:' + get_value(item, 'name'))
-            current_item_amount = get_value(item, 'amount')
+            current_item_def = datastore.get('itemdetails:' + item)
 
             # Determine if it's better than any previous item we've seen
-            if current_item_def.price > best_cost and current_item_def.price <= max_cost:
+            if current_item_def.price > best_cost and current_item_def.price <= max_cost\
+                    and current_item_def.billing_method.value == 'unit':
                 best_cost = current_item_def.price
+                best_item = {'name': item, 'amount': 1}
 
         savings = self.off/100 * best_cost
-        return round(savings, 2)
+        consumed_items = []
+        if best_item is not None:
+            consumed_items.append(best_item)
+            consumed_items.append({'name': item_def.name, 'amount': get_value(applied_to_item, 'amount')})
+        return (round(savings, 2), consumed_items)

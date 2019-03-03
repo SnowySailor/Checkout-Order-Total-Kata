@@ -1,6 +1,7 @@
 import json
 
 from src.helpers import get_value
+import copy
 
 def MakeOrder(new_order_id, datastore):
     class Order:
@@ -42,6 +43,7 @@ def MakeOrder(new_order_id, datastore):
 
         def calculate_total_no_specials(self):
             total = 0.00
+            # Sum up all the prices times the amounts of each item in the order
             for item_name, amount in self.items.items():
                 item = datastore.get('itemdetails:' + item_name)
                 total += amount * item.price
@@ -51,10 +53,29 @@ def MakeOrder(new_order_id, datastore):
 
         def calculate_total_with_specials(self):
             savings = 0.00
-            for item, amount in self.items.items():
+            # Create a copy of the items dict so we don't have to worry
+            # about updating the self.items dict
+            items_copy = copy.deepcopy(self.items)
+
+            for key in items_copy.keys():
+                item   = key
+                amount = items_copy[key]
+
+                # Get the current item's definition
                 item_def = datastore.get('itemdetails:' + item)
                 if item_def.special is not None:
-                    savings += item_def.special.calculate_best_savings({'name': item, 'amount': amount}, self.items, datastore)
+                    # Find the amount the customer can save from this item's special
+                    # and which items are involved in the special
+                    (new_savings, items_consumed) = item_def.special.calculate_best_savings(
+                        {'name': item, 'amount': amount}, items_copy, datastore)
+
+                    # Account for the savings
+                    savings += new_savings
+                    # Remove any consumed items from the copy of the order's items
+                    for item_consumed in items_consumed:
+                        items_copy[get_value(item_consumed, 'name')] -= get_value(item_consumed, 'amount')
+
+            # Return the original order total minus the savings
             return round(self.calculate_total_no_specials() - savings, 2)
 
         def calculate_total(self):
@@ -72,6 +93,5 @@ def MakeOrder(new_order_id, datastore):
                 return self.calculate_total_with_specials()
             else:
                 return self.calculate_total_no_specials()
-
 
     return Order(new_order_id)

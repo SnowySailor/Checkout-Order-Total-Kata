@@ -26,13 +26,13 @@ class AforB:
         # If the number of items you have to buy is greater than the limit,
         # there is no way this special can apply to anything
         if self.limit is not None and chunk_size > self.limit:
-            return 0
+            return (0, [])
 
         amount = get_value(applied_to_item, 'amount', 0)
         # If the customer hasn't bought the minimum amount, there is no
         # way there can be any savings
         if amount < chunk_size:
-            return 0
+            return (0, [])
 
         # If the amount the customer is buying is more than the limit for
         # the special, just decrease the amount that the special will be
@@ -45,4 +45,4 @@ class AforB:
 
         # Return the original price minus the price with discounts
         savings = (chunks * chunk_size * item.price) - (chunks * self.price)
-        return round(savings, 2)
+        return (round(savings, 2), [{'name': item.name, 'amount': chunks * chunk_size}])
