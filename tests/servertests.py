@@ -338,6 +338,22 @@ def MakeServerTests(baseurl):
             total = order.calculate_total()
             self.assertEqual(total, 111.33)
 
+        def test_calculate_total_for_order_with_no_specials_and_4_items(self):
+            datastore = DataStore()
+            item  = self.create_item('soup', 2.00, 'unit', None, datastore)
+            item2 = self.create_item('peas', 1.78, 'unit', None, datastore)
+            item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
+            item4 = self.create_item('beef', 9.99, 'weight', None, datastore)
+            order = self.create_order(datastore)
+
+            order.add_item(item, 1)
+            order.add_item(item2, 1)
+            order.add_item(item3, 5.32)
+            order.add_item(item4, 99.34)
+
+            total = order.calculate_total()
+            self.assertEqual(total, 1008.80)
+
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)
             datastore.set('itemdetails:' + name, item)
