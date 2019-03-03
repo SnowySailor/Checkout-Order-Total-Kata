@@ -16,6 +16,12 @@ class Markdown:
     def calculate_best_savings(self, applied_to_item, items, datastore):
         item = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
 
+        # If the customer is purchasing more than the limit, just set the amount
+        # to the limit
         amount = get_value(applied_to_item, 'amount')
+        if self.limit is not None and self.limit < amount:
+            amount = self.limit
+        
+        # Return the original price minus the new price with the markdown
         savings = (amount * item.price) - (amount * (self.percentage/100) * item.price)
         return savings
