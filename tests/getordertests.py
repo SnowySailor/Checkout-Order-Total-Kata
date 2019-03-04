@@ -11,9 +11,9 @@ def MakeGetOrderTests(baseurl):
 
         @classmethod
         def setUpClass(self):
-            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
+            post_data = {'identifier': 'milk', 'price': 1.50, 'billing_method': 'unit'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
-            post_data = {'name': 'cheese', 'price': 5.75, 'billing_method': 'weight'}
+            post_data = {'identifier': 'cheese', 'price': 5.75, 'billing_method': 'weight'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
 
         def test_get_get_order_when_given_valid_order_id_returns_200(self):
@@ -28,7 +28,7 @@ def MakeGetOrderTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
-            post_data = {'order_id': self.order_id, 'item': 'milk', 'quantity': 1}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'milk', 'quantity': 1}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
@@ -36,7 +36,7 @@ def MakeGetOrderTests(baseurl):
             expected['id'] = self.order_id
             expected['total_without_specials'] = 1.50
             expected['total_with_specials'] = 1.50
-            expected['items'] = [{'name': 'milk', 'quantity': 1}]
+            expected['items'] = [{'identifier': 'milk', 'quantity': 1}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
@@ -46,7 +46,7 @@ def MakeGetOrderTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
-            post_data = {'order_id': self.order_id, 'item': 'cheese', 'quantity': 1}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'cheese', 'quantity': 1}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
@@ -54,7 +54,7 @@ def MakeGetOrderTests(baseurl):
             expected['id'] = self.order_id
             expected['total_without_specials'] = 5.75
             expected['total_with_specials'] = 5.75
-            expected['items'] = [{'name': 'cheese', 'quantity': 1.0}]
+            expected['items'] = [{'identifier': 'cheese', 'quantity': 1.0}]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)
             self.assertEqual(r.text, json.dumps(expected))
@@ -62,10 +62,10 @@ def MakeGetOrderTests(baseurl):
         def test_get_get_order_when_given_valid_order_id_with_specials_returns_correct_totals(self):
             special1 = {'type': 'getEOLforAoff', 'off': 25}
             special2 = {'type': 'markdown', 'price': 1.00}
-            item  = {'name': 'soup', 'price': 2.00, 'billing_method': 'unit', 'special': special2}
-            item2 = {'name': 'peas', 'price': 1.78, 'billing_method': 'unit'}
-            item3 = {'name': 'chicken', 'price': 2.37, 'billing_method': 'weight'}
-            item4 = {'name': 'beef', 'price': 9.99, 'billing_method': 'weight', 'special': special1}
+            item  = {'identifier': 'soup', 'price': 2.00, 'billing_method': 'unit', 'special': special2}
+            item2 = {'identifier': 'peas', 'price': 1.78, 'billing_method': 'unit'}
+            item3 = {'identifier': 'chicken', 'price': 2.37, 'billing_method': 'weight'}
+            item4 = {'identifier': 'beef', 'price': 9.99, 'billing_method': 'weight', 'special': special1}
 
             r = requests.post(baseurl + '/createitem', data=json.dumps(item))
             r = requests.post(baseurl + '/createitem', data=json.dumps(item2))
@@ -76,13 +76,13 @@ def MakeGetOrderTests(baseurl):
             r = requests.post(baseurl + '/createorder', data=json.dumps(post_data))
             self.assertEqual(r.status_code, 200)
 
-            post_data = {'order_id': self.order_id, 'item': 'soup', 'quantity': 4}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'soup', 'quantity': 4}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
-            post_data = {'order_id': self.order_id, 'item': 'peas', 'quantity': 1}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'peas', 'quantity': 1}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
-            post_data = {'order_id': self.order_id, 'item': 'chicken', 'quantity': 4.32}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'chicken', 'quantity': 4.32}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
-            post_data = {'order_id': self.order_id, 'item': 'beef', 'quantity': 9.34}
+            post_data = {'order_id': self.order_id, 'item_identifier': 'beef', 'quantity': 9.34}
             r = requests.post(baseurl + '/additemtoorder', data=json.dumps(post_data))
 
             expected = dict()
@@ -90,10 +90,10 @@ def MakeGetOrderTests(baseurl):
             expected['total_without_specials'] = 113.33
             expected['total_with_specials'] = 106.77
             expected['items'] = [
-                {'name': 'soup', 'quantity': 4},
-                {'name': 'peas', 'quantity': 1},
-                {'name': 'chicken', 'quantity': 4.32},
-                {'name': 'beef', 'quantity': 9.34}
+                {'identifier': 'soup', 'quantity': 4},
+                {'identifier': 'peas', 'quantity': 1},
+                {'identifier': 'chicken', 'quantity': 4.32},
+                {'identifier': 'beef', 'quantity': 9.34}
             ]
             r = requests.get(baseurl + '/getorder?id=' + self.order_id)
             self.assertEqual(r.status_code, 200)

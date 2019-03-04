@@ -12,21 +12,21 @@ def MakeOrder(new_order_id, datastore):
 
         def add_item(self, item, added_quantity):
             # Get the quantity we currently are holding for this order
-            current_quantity = get_value(self.items, item.name, 0)
-            self.items[item.name] = current_quantity + added_quantity
+            current_quantity = get_value(self.items, item.identifier, 0)
+            self.items[item.identifier] = current_quantity + added_quantity
 
         def remove_item(self, item, removed_quantity):
             # Get the quantity we currently are holding for this order
-            current_quantity = get_value(self.items, item.name, 0)
+            current_quantity = get_value(self.items, item.identifier, 0)
             # Remove the desired quantity
             new_quantity = current_quantity - removed_quantity
             # It doesn't make sense to have a zero or negative quantity of items
             # so if the value goes negative or is 0, we want to delete the item
             # from the order
             if new_quantity <= 0:
-                del self.items[item.name]
+                del self.items[item.identifier]
             else:
-                self.items[item.name] = new_quantity
+                self.items[item.identifier] = new_quantity
 
         def to_json(self):
             d = dict()
@@ -38,7 +38,7 @@ def MakeOrder(new_order_id, datastore):
             # to the list of items in the order for serialization
             for item_name, quantity in self.items.items():
                 item_dict = dict()
-                item_dict['name'] = item_name
+                item_dict['identifier'] = item_name
                 item_dict['quantity'] = quantity
                 d['items'].append(item_dict)
             return json.dumps(d)
@@ -78,7 +78,7 @@ def MakeOrder(new_order_id, datastore):
                 # whereas the dict does not. This will calculate the quantity saved by
                 # a given special permutation
                 for item_dict in instance_items:
-                    item   = get_value(item_dict, 'name')
+                    item   = get_value(item_dict, 'identifier')
                     quantity = get_value(instance_items_dict, item)
 
                     # The item must have been fully consumed already and cannot be
@@ -97,13 +97,13 @@ def MakeOrder(new_order_id, datastore):
                         # Find the quantity the customer can save from this item's special
                         # and which items are involved in the special
                         (new_savings, items_consumed) = item_def.special.calculate_best_savings(
-                            {'name': item, 'quantity': quantity}, instance_items_dict, datastore)
+                            {'identifier': item, 'quantity': quantity}, instance_items_dict, datastore)
                         
                         # Account for the savings
                         instance_savings += new_savings
                         # Remove any consumed items from the instance item dict
                         for item_consumed in items_consumed:
-                            consumed_name = get_value(item_consumed, 'name')
+                            consumed_name = get_value(item_consumed, 'identifier')
                             instance_items_dict[consumed_name] -= get_value(item_consumed, 'quantity')
                             # If all of this item has been consumed by specials, remove it from the
                             # possible items to consume or be used in the future
@@ -139,7 +139,7 @@ def MakeOrder(new_order_id, datastore):
                     item_def = datastore.get('itemdetails:' + item)
                     if item_def.special is not None:
                         (savings, items_consumed) = item_def.special.calculate_best_savings(
-                            {'name': item, 'quantity': quantity}, items_copy, datastore)
+                            {'identifier': item, 'quantity': quantity}, items_copy, datastore)
 
                         # Check to see if the current special would give the customer
                         # the greatest savings
@@ -154,7 +154,7 @@ def MakeOrder(new_order_id, datastore):
 
                 # Remove all items that were consumed by the best special
                 for item_consumed in best_special_consumed:
-                    consumed_name = get_value(item_consumed, 'name')
+                    consumed_name = get_value(item_consumed, 'identifier')
                     items_copy[consumed_name] -= get_value(item_consumed, 'quantity')
                     # If all of this item has been consumed by specials, remove it from the
                     # possible items to consume or be used in the future
@@ -195,7 +195,7 @@ def MakeOrder(new_order_id, datastore):
             for item, quantity in self.items.items():
                 item_def = datastore.get('itemdetails:' + item)
 
-                item_dict = {'name': item, 'quantity': quantity}
+                item_dict = {'identifier': item, 'quantity': quantity}
                 if item_def.special is not None:
                     specials.append(item_dict)
                 else:

@@ -12,8 +12,8 @@ class Methods(enum.Enum):
     UNIT   = 'unit'
 
 class Item:
-    def __init__(self, name, price, billing_method, special):
-        self.name           = name
+    def __init__(self, identifier, price, billing_method, special):
+        self.identifier     = identifier
         self.price          = price
         if billing_method.lower() == 'weight':
             self.billing_method = Methods.WEIGHT
@@ -48,7 +48,7 @@ class Item:
     def to_json(self):
         # Push all item values into a dict and dump it as json
         d = dict()
-        d['name']           = self.name
+        d['identifier']     = self.identifier
         d['price']          = self.price
         d['billing_method'] = self.billing_method.value
         # Only want to return the special to the client if one exists

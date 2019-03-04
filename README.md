@@ -75,7 +75,7 @@ Perform a GET to `/getorder` to get an order's details. This returns the order w
 Used to create a new item definition in the application. Accepts JSON in the POST body of the form
 ```json
 {
-  "name": "{item_name}",
+  "identifier": "{item_identifier}",
   "price": "item_price_per_unit_as_number",
   "billing_method": "{either 'weight' or 'unit'}",
   "special": {"special": "json"}
@@ -86,8 +86,8 @@ The `"price"` field is the decimal cost of the item per billing unit. For exampl
 To mark down an item's price, simply re-POST the same JSON with the updated price. All existing orders will have their totals updated automatically.
 
 ---
-### `/getitem?name={item_name}`
-When given an item name, returns JSON in the same format as the JSON that is accepted by `/createitem`
+### `/getitem?identifier={item_identifier}`
+When given an item identifier, returns JSON in the same format as the JSON that is accepted by `/createitem`
 
 ---
 ### `/additemtoorder`
@@ -95,7 +95,7 @@ Adds an item to an order given that both the item and order already exist. Accep
 ```json
 {
   "order_id": "{the_order_id}",
-  "item": "{the_items_name}",
+  "identifier": "{the_items_identifier}",
   "quantity": "number_or_weight_of_added_items_as_number"
 }
 ```
@@ -107,7 +107,7 @@ Removed an item from an order given that both the item and order already exist. 
 ```json
 {
   "order_id": "{the_order_id}",
-  "item": "{the_items_name}",
+  "identifier": "{the_items_identifier}",
   "quantity": "number_or_weight_of_removed_items_as_number"
 }
 ```
@@ -142,11 +142,11 @@ Returns a JSON-encoded string with information about the order corresponding to 
   "total_with_specials": "pre_tax_order_total_with_specials",
   "items": [
     {
-      "name": "{item_1_name}",
+      "identifier": "{item_1_identifier}",
       "quantity": "item_1_quantity_as_number"
     },
     {
-      "name": "{item_2_name}",
+      "identifier": "{item_2_identifier}",
       "quantity": "item_2_quantity_as_number"
     }
   ]

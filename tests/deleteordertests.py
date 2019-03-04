@@ -11,9 +11,9 @@ def MakeDeleteOrderTests(baseurl):
 
         @classmethod
         def setUpClass(self):
-            post_data = {'name': 'milk', 'price': 1.50, 'billing_method': 'unit'}
+            post_data = {'identifier': 'milk', 'price': 1.50, 'billing_method': 'unit'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
-            post_data = {'name': 'cheese', 'price': 5.75, 'billing_method': 'weight'}
+            post_data = {'identifier': 'cheese', 'price': 5.75, 'billing_method': 'weight'}
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
 
         def test_delete_order_when_order_does_not_exist_returns_400(self):

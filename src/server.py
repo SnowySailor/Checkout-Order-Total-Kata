@@ -66,17 +66,17 @@ def MakeRequestHandler(is_testing_mode, datastore):
 
         def do_get_item(self):
             url_query = parse_url_query(self.path)
-            name = get_value(url_query, 'name')
-            # Ensure that the client provided a name to look up
-            if name is None or name == '':
-                set_response(self, 400, 'Must provide name.', 'text/text')
+            identifier = get_value(url_query, 'identifier')
+            # Ensure that the client provided an identifier to look up
+            if identifier is None or identifier == '':
+                set_response(self, 400, 'Must provide identifier.', 'text/text')
             else:
-                item = datastore.get('itemdetails:' + name, None)
+                item = datastore.get('itemdetails:' + identifier, None)
                 if item is not None:
                     # Return the item to the user as json
                     set_response(self, 200, item.to_json())
                 else:
-                    # If the name isn't a name from an item, tell the client there
+                    # If the identifier isn't an identifier from an item, tell the client there
                     # was a problem
                     set_response(self, 400, 'Item does not exist.', 'text/text')
 
@@ -120,15 +120,15 @@ def MakeRequestHandler(is_testing_mode, datastore):
             item_dict = parse_json(post_data)
 
             # Pull out all of the fields we need
-            name           = get_value(item_dict, 'name')
+            identifier     = get_value(item_dict, 'identifier')
             price          = parse_float(get_value(item_dict, 'price', 0))
             billing_method = get_value(item_dict, 'billing_method', '')
             special        = get_value(item_dict, 'special')
 
             # Ensure that all necessary data is present
             msg = ''
-            if name is None or name == '':
-                msg += 'Must provide name. '
+            if identifier is None or identifier == '':
+                msg += 'Must provide identifier. '
             if price is None or price <= 0:
                 msg += 'Must provide price and must be positive. '
 
@@ -142,8 +142,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 400, msg, 'text/text')
                 else:
                     # Create and store the item and tell the user everything is fine
-                    item = Item(name, price, billing_method, special)
-                    datastore.set('itemdetails:' + item.name, item)
+                    item = Item(identifier, price, billing_method, special)
+                    datastore.set('itemdetails:' + item.identifier, item)
                     set_response(self, 200, '')
 
         def do_post_create_order(self):
@@ -164,22 +164,22 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 400, 'Order with that id already exists.', 'text/text')
 
         def do_post_add_item_to_order(self):
-            post_data = get_raw_post_data(self)
-            post_dict = parse_json(post_data)
-            order_id  = get_value(post_dict, 'order_id')
-            item_name = get_value(post_dict, 'item')
+            post_data       = get_raw_post_data(self)
+            post_dict       = parse_json(post_data)
+            order_id        = get_value(post_dict, 'order_id')
+            item_identifier = get_value(post_dict, 'item_identifier')
 
             msg = ''
             if order_id is None or order_id == '':
                 msg += 'Must provide order_id. '
-            if item_name is None:
+            if item_identifier is None:
                 msg += 'Must provide item. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
                 order = datastore.get('orders:' + order_id)
-                item  = datastore.get('itemdetails:' + item_name)
+                item  = datastore.get('itemdetails:' + item_identifier)
 
                 if order is None:
                     set_response(self, 400, 'Order does not exist.', 'text/text')
@@ -197,27 +197,27 @@ def MakeRequestHandler(is_testing_mode, datastore):
                     set_response(self, 200, '')
 
         def do_post_remove_item_from_order(self):
-            post_data = get_raw_post_data(self)
-            post_dict = parse_json(post_data)
-            order_id  = get_value(post_dict, 'order_id')
-            item_name = get_value(post_dict, 'item')
+            post_data       = get_raw_post_data(self)
+            post_dict       = parse_json(post_data)
+            order_id        = get_value(post_dict, 'order_id')
+            item_identifier = get_value(post_dict, 'item_identifier')
 
             msg = ''
             if order_id is None or order_id == '':
                 msg += 'Must provide order_id. '
-            if item_name is None or item_name == '':
+            if item_identifier is None or item_identifier == '':
                 msg += 'Must provide item. '
 
             if msg != '':
                 set_response(self, 400, msg, 'text/text')
             else:
-                item  = datastore.get('itemdetails:' + item_name)
+                item  = datastore.get('itemdetails:' + item_identifier)
                 order = datastore.get('orders:' + order_id)
                 if order is None:
                     set_response(self, 400, 'Order does not exist.', 'text/text')
                 elif item is None:
                     set_response(self, 400, 'Item does not exist.', 'text/text')
-                elif get_value(order.items, item_name) is None:
+                elif get_value(order.items, item_identifier) is None:
                     set_response(self, 400, 'Order does not contain provided item.', 'text/text')
                 else:
                     # If the item is a UNIT type, we only want to allow integers

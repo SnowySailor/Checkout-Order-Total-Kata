@@ -152,9 +152,9 @@ def merge_item_dict_lists_to_dict(*lists):
         # Iterate over the dicts in the list and add
         # each item to the master dict
         for item in l:
-            name    = get_value(item, 'name')
-            quantity  = get_value(item, 'quantity')
-            d[name] = quantity  
+            identifier = get_value(item, 'identifier')
+            quantity   = get_value(item, 'quantity')
+            d[identifier] = quantity  
     return d
 
 def has_specials(item_dict, datastore):

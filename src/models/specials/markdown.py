@@ -14,7 +14,7 @@ class Markdown:
         return d
 
     def calculate_best_savings(self, applied_to_item, items, datastore):
-        item = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
+        item = datastore.get('itemdetails:' + get_value(applied_to_item, 'identifier'))
 
         # If the customer is purchasing more than the limit, just set the quantity
         # to the limit
@@ -24,4 +24,4 @@ class Markdown:
         
         # Return the amount saved with the markdown
         savings = quantity * self.price
-        return (savings, [{'name': item.name, 'quantity': quantity}])
+        return (savings, [{'identifier': item.identifier, 'quantity': quantity}])

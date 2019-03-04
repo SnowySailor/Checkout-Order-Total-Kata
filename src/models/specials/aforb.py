@@ -18,7 +18,7 @@ class AforB:
         return d
 
     def calculate_best_savings(self, applied_to_item, items, datastore):
-        item = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
+        item = datastore.get('itemdetails:' + get_value(applied_to_item, 'identifier'))
 
         # How many items are involved in each application of this special
         chunk_size = self.quantity
@@ -45,4 +45,4 @@ class AforB:
 
         # Return the original price minus the price with discounts
         savings = (chunks * chunk_size * item.price) - (chunks * self.price)
-        return (round(savings, 2), [{'name': item.name, 'quantity': chunks * chunk_size}])
+        return (round(savings, 2), [{'identifier': item.identifier, 'quantity': chunks * chunk_size}])
