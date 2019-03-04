@@ -83,7 +83,7 @@ The `"price"` field is the decimal cost of the item per billing unit. For exampl
 To mark down an item's price, simply re-POST the same JSON with the updated price. All existing orders will have their totals updated automatically.
 
 ---
-### `/itemdetails?name={item_name}`
+### `/getitem?name={item_name}`
 When given an item name, returns JSON in the same format as the JSON that is accepted by `/createitem`
 
 ---

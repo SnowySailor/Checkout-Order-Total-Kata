@@ -22,8 +22,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
                 self.do_get_ping()
             elif path.startswith('/datastore/') and is_testing_mode:
                 self.do_get_data_store()
-            elif path == '/itemdetails':
-                self.do_get_item_details()
+            elif path == '/getitem':
+                self.do_get_item()
             elif path == '/getorder':
                 self.do_get_order()
             else:
@@ -62,7 +62,7 @@ def MakeRequestHandler(is_testing_mode, datastore):
             value = datastore.get(data_id)
             set_response(self, 200, json.dumps(value))
 
-        def do_get_item_details(self):
+        def do_get_item(self):
             url_query = parse_url_query(self.path)
             name = get_value(url_query, 'name')
             # Ensure that the client provided a name to look up
