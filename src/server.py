@@ -241,11 +241,15 @@ def MakeRequestHandler(is_testing_mode, datastore):
             post_data = get_raw_post_data(self)
             post_dict = parse_json(post_data)
             order_id  = get_value(post_dict, 'id')
-            if datastore.get('orders:' + order_id) is not None:
-                datastore.delete('orders:' + order_id)
-                set_response(self, 200, '')
+
+            if order_id is None:
+                set_response(self, 400, 'Must provide id.', 'text/text')
             else:
-                set_response(self, 400, 'Order does not exist', 'text/text')
+                if datastore.get('orders:' + order_id) is not None:
+                    datastore.delete('orders:' + order_id)
+                    set_response(self, 200, '')
+                else:
+                    set_response(self, 400, 'Order does not exist', 'text/text')
 
     return RequestHandler
 

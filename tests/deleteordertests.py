@@ -21,6 +21,11 @@ def MakeDeleteOrderTests(baseurl):
             r = requests.delete(baseurl + '/deleteorder', data=json.dumps(order))
             self.assertEqual(r.status_code, 400)
 
+        def test_delete_order_when_id_not_provided_returns_400(self):
+            order = {}
+            r = requests.delete(baseurl + '/deleteorder', data=json.dumps(order))
+            self.assertEqual(r.status_code, 400)
+
         def test_delete_order_when_order_exists_returns_200(self):
             order = {'id': self.order_id}
             r = requests.post(baseurl + '/createorder', data=json.dumps(order))
