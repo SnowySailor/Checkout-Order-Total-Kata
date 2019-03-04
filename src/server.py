@@ -50,6 +50,8 @@ def MakeRequestHandler(is_testing_mode, datastore):
             path = urlparse(self.path).path
             if path.startswith('/datastore/') and is_testing_mode: # Route only available for testing mode
                 self.do_delete_data_store()
+            elif path == '/deleteorder':
+                self.do_delete_order()
             else:
                 set_response(self, 404, '404', 'text/html')
 
@@ -234,6 +236,9 @@ def MakeRequestHandler(is_testing_mode, datastore):
             data_id = get_path_id(self.path)
             datastore.delete(data_id)
             set_response(self, 200, '')
+
+        def do_delete_order(self):
+            set_response(self, 400, '')
 
     return RequestHandler
 

@@ -9,12 +9,13 @@ from tests.additemtoordertests       import MakeAddItemToOrderTests
 from tests.removeitemfromordertests  import MakeRemoveItemFromOrderTests
 from tests.calculatebestsavingstests import MakeCalculateBestSavingsTests
 from tests.calculatetotaltests       import MakeCalculateTotalTests
+from tests.deleteordertests          import MakeDeleteOrderTests
 
 def run_tests():
     test_classes = [MakeClientTests, MakeHelpersTests, MakeGetOrderTests,
         MakeCreateItemTests, MakeGetItemTests, MakeCreateOrderTests,
         MakeAddItemToOrderTests, MakeRemoveItemFromOrderTests, MakeCalculateBestSavingsTests,
-        MakeCalculateTotalTests]
+        MakeCalculateTotalTests, MakeDeleteOrderTests]
     suite  = unittest.TestSuite()
     loader = unittest.TestLoader()
     for test_class_factory in test_classes:
