@@ -119,7 +119,7 @@ Create a new order to hold items for a customer. Accepts JSON in the POST body o
   "id": "{new_order_id}"
 }
 ```
-The `"id"` must be unique. It is suggested that a 128-bit UUID is used to prevent collisions from occurring. An order with a given `"id"` can only be created once and cannot be deleted.
+The `"id"` must be unique. It is suggested that a 128-bit UUID is used to prevent collisions from occurring. Only one order with a given `"id"` can exist at a time.
 
 ---
 ### `/deleteorder`
