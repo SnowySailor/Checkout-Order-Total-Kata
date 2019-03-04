@@ -9,7 +9,7 @@ Here is a link to the original task description: https://github.com/PillarTechno
 Clone this repository onto your machine and `cd` into it via the command line. Run `python3 main.py` to start the application.
 
 ## Testing
-Application is being written and tested on Ubuntu 18.04 with the Python 3.6.5 interpreter that comes pre-installed. It was also tested on macOS 10.12.6 with the Python 3.6.5 interpreter from Homebrew.
+The application was written and tested on Ubuntu 18.04 with the Python 3.6.5 interpreter that comes pre-installed. It was also tested on macOS 10.12.6 with the Python 3.6.5 interpreter from Homebrew.
 
 Tests are located in the `tests` directory and are separated into several files.
 
@@ -163,3 +163,4 @@ For the code that went into the algorithms, see `/src/models/order.py`
 
 ### Possible improvements
 * Add a list of discounts and their amounts to the `/getitem` API call. All the data is computed in the internal algoritm for calculating the total, but it needs to be passed back to the Order class' `to_json` function and packaged into the returned data.
+* Make the port that the application runs on configurable through either a file or the command line when running the program. A port that is unlikely to be used was selected as the default port, but it's possible something else could be running on it so allowing the host to select the port themselves would be optimal.
