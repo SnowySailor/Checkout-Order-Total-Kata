@@ -1,8 +1,6 @@
 from src.helpers import get_value
 
 class DataStore:
-    database = dict()
-
     def __init__(self):
         self.database = dict()
 
