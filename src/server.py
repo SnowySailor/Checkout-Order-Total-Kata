@@ -238,7 +238,13 @@ def MakeRequestHandler(is_testing_mode, datastore):
             set_response(self, 200, '')
 
         def do_delete_order(self):
-            set_response(self, 400, '')
+            post_data = get_raw_post_data(self)
+            post_dict = parse_json(post_data)
+            order_id  = get_value(post_dict, 'id')
+            if datastore.get('orders:' + order_id) is not None:
+                set_response(self, 200, '')
+            else:
+                set_response(self, 400, '')
 
     return RequestHandler
 

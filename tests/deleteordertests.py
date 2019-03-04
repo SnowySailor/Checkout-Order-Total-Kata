@@ -17,8 +17,15 @@ def MakeDeleteOrderTests(baseurl):
             r = requests.post(baseurl + '/createitem', data=json.dumps(post_data))
 
         def test_delete_order_when_order_does_not_exist_returns_400(self):
-            first_order = {'id': 'doesnotexist'}
-            r = requests.delete(baseurl + '/deleteorder', data=json.dumps(first_order))
+            order = {'id': 'doesnotexist'}
+            r = requests.delete(baseurl + '/deleteorder', data=json.dumps(order))
             self.assertEqual(r.status_code, 400)
+
+        def test_delete_order_when_order_exists_returns_200(self):
+            order = {'id': self.order_id}
+            r = requests.post(baseurl + '/createorder', data=json.dumps(order))
+            self.assertEqual(r.status_code, 200)
+            r = requests.delete(baseurl + '/deleteorder', data=json.dumps(order))
+            self.assertEqual(r.status_code, 200)
 
     return DeleteOrderTests
