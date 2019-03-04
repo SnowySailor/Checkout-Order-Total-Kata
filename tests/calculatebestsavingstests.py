@@ -21,7 +21,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 1}, dict(), datastore)
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 1}, dict(), datastore)
             self.assertEqual(savings, (0, []))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_1_amount_limit_1_returns_0(self):
@@ -36,7 +36,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 1}, dict(), datastore)
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 1}, dict(), datastore)
             self.assertEqual(savings, (0, []))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_5_amount_returns_correct_savings(self):
@@ -50,8 +50,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 5}, dict(), datastore)
-            self.assertEqual(savings, (5.0, [{'name': 'test', 'amount': 3}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 5}, dict(), datastore)
+            self.assertEqual(savings, (5.0, [{'name': 'test', 'quantity': 3}]))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_buy_1_get_2_50_off(self):
             special = {
@@ -64,8 +64,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 6}, dict(), datastore)
-            self.assertEqual(savings, (10.0, [{'name': 'test', 'amount': 6}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 6}, dict(), datastore)
+            self.assertEqual(savings, (10.0, [{'name': 'test', 'quantity': 6}]))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_buy_2_get_1_free(self):
             special = {
@@ -78,7 +78,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 6.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 2}, dict(), datastore)
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 2}, dict(), datastore)
             self.assertEqual(savings, (0, []))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_buy_2_get_1_free_1_occurrence(self):
@@ -92,8 +92,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 6.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 3}, dict(), datastore)
-            self.assertEqual(savings, (6.0, [{'name': 'test', 'amount': 3}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 3}, dict(), datastore)
+            self.assertEqual(savings, (6.0, [{'name': 'test', 'quantity': 3}]))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_item_with_buy_2_get_1_free_2_occurrences(self):
             special = {
@@ -106,8 +106,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 6.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 7}, dict(), datastore)
-            self.assertEqual(savings, (12.0, [{'name': 'test', 'amount': 6}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 7}, dict(), datastore)
+            self.assertEqual(savings, (12.0, [{'name': 'test', 'quantity': 6}]))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_buy_1_get_1_free_limit_2_with_10_items(self):
             special = {
@@ -121,8 +121,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 10}, dict(), datastore)
-            self.assertEqual(savings, (5.0, [{'name': 'test', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 10}, dict(), datastore)
+            self.assertEqual(savings, (5.0, [{'name': 'test', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_BuyAgetBforCoff_for_buy_1_get_1_free_limit_3_with_10_items(self):
             special = {
@@ -136,8 +136,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item = self.create_item('test', 5.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'test', 'amount': 10}, dict(), datastore)
-            self.assertEqual(savings, (5.0, [{'name': 'test', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'test', 'quantity': 10}, dict(), datastore)
+            self.assertEqual(savings, (5.0, [{'name': 'test', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_9_dollar_other_item(self):
             special = {
@@ -149,8 +149,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             item  = self.create_item('meat', 5.00, 'weight', special, datastore)
             item2 = self.create_item('soup', 4.50, 'unit', None, datastore)
             
-            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, {'soup': 2}, datastore)
-            self.assertEqual(savings, (2.25, [{'name': 'soup', 'amount': 1}, {'name': 'meat', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'meat', 'quantity': 2}, {'soup': 2}, datastore)
+            self.assertEqual(savings, (2.25, [{'name': 'soup', 'quantity': 1}, {'name': 'meat', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_items(self):
             special = {
@@ -162,8 +162,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             item  = self.create_item('meat', 5.00, 'weight', special, datastore)
             item2 = self.create_item('soup', 5.00, 'unit', None, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, {'soup': 3}, datastore)
-            self.assertEqual(savings, (2.50, [{'name': 'soup', 'amount': 1}, {'name': 'meat', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'meat', 'quantity': 2}, {'soup': 3}, datastore)
+            self.assertEqual(savings, (2.50, [{'name': 'soup', 'quantity': 1}, {'name': 'meat', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_other_single_item(self):
             special = {
@@ -175,7 +175,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             item  = self.create_item('meat', 5.00, 'weight', special, datastore)
             item2 = self.create_item('soup', 15.00, 'unit', None, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, {'soup': 1}, datastore)
+            savings = item.special.calculate_best_savings({'name': 'meat', 'quantity': 2}, {'soup': 1}, datastore)
             self.assertEqual(savings, (0.00, []))
 
         def test_calculate_best_savings_for_GetEOLforAoff_with_10_dollar_meat_and_15_dollar_two_other_items(self):
@@ -189,8 +189,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             item2 = self.create_item('soup', 10.00, 'unit', None, datastore)
             item3 = self.create_item('pasta', 1.00, 'unit', None, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'meat', 'amount': 2}, {'soup': 1, 'pasta': 15}, datastore)
-            self.assertEqual(savings, (5.00, [{'name': 'soup', 'amount': 1}, {'name': 'meat', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'meat', 'quantity': 2}, {'soup': 1, 'pasta': 15}, datastore)
+            self.assertEqual(savings, (5.00, [{'name': 'soup', 'quantity': 1}, {'name': 'meat', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_AforB_with_2_for_5_with_2_items(self):
             special = {
@@ -202,8 +202,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 3.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 2}, dict(), datastore)
-            self.assertEqual(savings, (1.00, [{'name': 'soup', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 2}, dict(), datastore)
+            self.assertEqual(savings, (1.00, [{'name': 'soup', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_AforB_with_5_for_5_with_10_items(self):
             special = {
@@ -215,8 +215,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 10}, dict(), datastore)
-            self.assertEqual(savings, (10.00, [{'name': 'soup', 'amount': 10}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 10}, dict(), datastore)
+            self.assertEqual(savings, (10.00, [{'name': 'soup', 'quantity': 10}]))
 
         def test_calculate_best_savings_for_AforB_with_5_for_5_with_15_items_and_limit_10(self):
             special = {
@@ -229,8 +229,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 10}, dict(), datastore)
-            self.assertEqual(savings, (10.00, [{'name': 'soup', 'amount': 10}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 10}, dict(), datastore)
+            self.assertEqual(savings, (10.00, [{'name': 'soup', 'quantity': 10}]))
 
         def test_calculate_best_savings_for_AforB_with_5_for_5_with_8_items_and_limit_10(self):
             special = {
@@ -243,8 +243,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 8}, dict(), datastore)
-            self.assertEqual(savings, (5.00, [{'name': 'soup', 'amount': 5}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 8}, dict(), datastore)
+            self.assertEqual(savings, (5.00, [{'name': 'soup', 'quantity': 5}]))
 
         def test_calculate_best_savings_for_AforB_with_10_for_5_with_9_items_returns_0(self):
             special = {
@@ -256,7 +256,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 9}, dict(), datastore)
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 9}, dict(), datastore)
             self.assertEqual(savings, (0.00, []))
 
         def test_calculate_best_savings_for_AforB_with_10_for_5_with_9_items_limit_5_returns_0(self):
@@ -270,7 +270,7 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 9}, dict(), datastore)
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 9}, dict(), datastore)
             self.assertEqual(savings, (0.00, []))
 
         def test_calculate_best_savings_for_AforB_with_5_for_5_with_9_items_limit_5_returns_0(self):
@@ -284,8 +284,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 9}, dict(), datastore)
-            self.assertEqual(savings, (5.00, [{'name': 'soup', 'amount': 5}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 9}, dict(), datastore)
+            self.assertEqual(savings, (5.00, [{'name': 'soup', 'quantity': 5}]))
 
         def test_calculate_best_savings_for_markdown_with_50_off_with_2_items(self):
             special = {
@@ -296,8 +296,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 2}, dict(), datastore)
-            self.assertEqual(savings, (2.00, [{'name': 'soup', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 2}, dict(), datastore)
+            self.assertEqual(savings, (2.00, [{'name': 'soup', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_markdown_with_50_off_with_4_items_with_limit_2(self):
             special = {
@@ -309,8 +309,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 4}, dict(), datastore)
-            self.assertEqual(savings, (2.00, [{'name': 'soup', 'amount': 2}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 4}, dict(), datastore)
+            self.assertEqual(savings, (2.00, [{'name': 'soup', 'quantity': 2}]))
 
         def test_calculate_best_savings_for_markdown_with_100_off_with_5_items_with_limit_5(self):
             special = {
@@ -322,8 +322,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, dict(), datastore)
-            self.assertEqual(savings, (10.00, [{'name': 'soup', 'amount': 5}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 5}, dict(), datastore)
+            self.assertEqual(savings, (10.00, [{'name': 'soup', 'quantity': 5}]))
 
         def test_calculate_best_savings_for_markdown_with_0_off_with_5_items_with_limit_5(self):
             special = {
@@ -335,8 +335,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, dict(), datastore)
-            self.assertEqual(savings, (0.00, [{'name': 'soup', 'amount': 5}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 5}, dict(), datastore)
+            self.assertEqual(savings, (0.00, [{'name': 'soup', 'quantity': 5}]))
 
         def test_calculate_best_savings_for_markdown_with_25_off_with_5_items_with_limit_1(self):
             special = {
@@ -348,8 +348,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, dict(), datastore)
-            self.assertEqual(savings, (0.50, [{'name': 'soup', 'amount': 1}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 5}, dict(), datastore)
+            self.assertEqual(savings, (0.50, [{'name': 'soup', 'quantity': 1}]))
 
         def test_calculate_best_savings_for_markdown_with_25_off_with_5_items_with_limit_6(self):
             special = {
@@ -361,8 +361,8 @@ def MakeCalculateBestSavingsTests(baseurl):
             datastore = DataStore()
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
 
-            savings = item.special.calculate_best_savings({'name': 'soup', 'amount': 5}, dict(), datastore)
-            self.assertEqual(savings, (2.50, [{'name': 'soup', 'amount': 5}]))
+            savings = item.special.calculate_best_savings({'name': 'soup', 'quantity': 5}, dict(), datastore)
+            self.assertEqual(savings, (2.50, [{'name': 'soup', 'quantity': 5}]))
 
         def create_item(self, name, price, billing_method, special, datastore):
             item = Item(name, price, billing_method, special)

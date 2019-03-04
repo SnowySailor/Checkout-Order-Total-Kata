@@ -3,15 +3,15 @@ import math
 
 # "Buy 3 cans of soup for $5.00"
 class AforB:
-    def __init__(self, amount, price, limit):
+    def __init__(self, quantity, price, limit):
         self.price  = price
-        self.amount = amount
+        self.quantity = quantity
         self.limit = limit
 
     def to_dict(self):
         d = dict()
         d['type']  = 'AforB'
-        d['buy']   = self.amount
+        d['buy']   = self.quantity
         d['for']   = self.price
         if self.limit is not None:
             d['limit'] = self.limit
@@ -21,28 +21,28 @@ class AforB:
         item = datastore.get('itemdetails:' + get_value(applied_to_item, 'name'))
 
         # How many items are involved in each application of this special
-        chunk_size = self.amount
+        chunk_size = self.quantity
 
         # If the number of items you have to buy is greater than the limit,
         # there is no way this special can apply to anything
         if self.limit is not None and chunk_size > self.limit:
             return (0, [])
 
-        amount = get_value(applied_to_item, 'amount', 0)
-        # If the customer hasn't bought the minimum amount, there is no
+        quantity = get_value(applied_to_item, 'quantity', 0)
+        # If the customer hasn't bought the minimum quantity, there is no
         # way there can be any savings
-        if amount < chunk_size:
+        if quantity < chunk_size:
             return (0, [])
 
-        # If the amount the customer is buying is more than the limit for
-        # the special, just decrease the amount that the special will be
+        # If the quantity the customer is buying is more than the limit for
+        # the special, just decrease the quantity that the special will be
         # applied to
-        if self.limit is not None and amount > self.limit:
-            amount = self.limit
+        if self.limit is not None and quantity > self.limit:
+            quantity = self.limit
 
         # How many applications of this special can there be?
-        chunks = math.floor(amount / chunk_size)
+        chunks = math.floor(quantity / chunk_size)
 
         # Return the original price minus the price with discounts
         savings = (chunks * chunk_size * item.price) - (chunks * self.price)
-        return (round(savings, 2), [{'name': item.name, 'amount': chunks * chunk_size}])
+        return (round(savings, 2), [{'name': item.name, 'quantity': chunks * chunk_size}])

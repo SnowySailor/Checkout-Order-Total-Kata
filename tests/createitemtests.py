@@ -147,7 +147,7 @@ def MakeCreateItemTests(baseurl):
             first_item = {'name': 'pie', 'price': 5.00, 'billing_method': 'unit'}
             second_item = {'name': 'pie', 'price': 4.05, 'billing_method': 'unit'}
             order = {'id': self.order_id}
-            order_item = {'order_id': self.order_id, 'item': 'pie', 'amount': 3}
+            order_item = {'order_id': self.order_id, 'item': 'pie', 'quantity': 3}
             r = requests.post(baseurl + '/createorder', data=json.dumps(order))
             self.assertEqual(r.status_code, 200)
             r = requests.post(baseurl + '/createitem', data=json.dumps(first_item))
@@ -161,7 +161,7 @@ def MakeCreateItemTests(baseurl):
             expected['id'] = self.order_id
             expected['total_without_specials'] = 15.00
             expected['total_with_specials'] = 15.00
-            expected['items'] = [{'name': 'pie', 'amount': 3}]
+            expected['items'] = [{'name': 'pie', 'quantity': 3}]
 
             self.assertEqual(r.text, json.dumps(expected))
 
@@ -174,7 +174,7 @@ def MakeCreateItemTests(baseurl):
             expected['id'] = self.order_id
             expected['total_without_specials'] = 12.15
             expected['total_with_specials'] = 12.15
-            expected['items'] = [{'name': 'pie', 'amount': 3}]
+            expected['items'] = [{'name': 'pie', 'quantity': 3}]
 
             self.assertEqual(r.text, json.dumps(expected))
 

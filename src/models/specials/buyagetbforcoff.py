@@ -30,22 +30,22 @@ class BuyAgetBforCoff:
         if self.limit is not None and chunk_size > self.limit:
             return (0, [])
 
-        amount = get_value(applied_to_item, 'amount', 0)
-        # If the customer hasn't bought the minimum amount, there is no
+        quantity = get_value(applied_to_item, 'quantity', 0)
+        # If the customer hasn't bought the minimum quantity, there is no
         # way there can be any savings
-        if amount < chunk_size:
+        if quantity < chunk_size:
             return (0, [])
 
-        # If the amount the customer is buying is more than the limit for
-        # the special, just decrease the amount that the special will be
+        # If the quantity the customer is buying is more than the limit for
+        # the special, just decrease the quantity that the special will be
         # applied to
-        if self.limit is not None and amount > self.limit:
-            amount = self.limit
+        if self.limit is not None and quantity > self.limit:
+            quantity = self.limit
 
         # How many applications of this special can there be?
-        chunks = math.floor(amount / chunk_size)
+        chunks = math.floor(quantity / chunk_size)
 
         # Return the number of applications times the total percentage
         # discount off a single item times the price of a single item
         savings = chunks * (self.off/100) * self.get * item.price
-        return (round(savings, 2), [{'name': item.name, 'amount': chunks * chunk_size}])
+        return (round(savings, 2), [{'name': item.name, 'quantity': chunks * chunk_size}])
