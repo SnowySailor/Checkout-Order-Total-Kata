@@ -108,7 +108,7 @@ Removed an item from an order given that both the item and order already exist. 
   "quantity": "number_or_weight_of_removed_items_as_number"
 }
 ```
-The `"quantity"` field is optional. It will automatically default to `1` for items with a `billing_method` of `unit`, and `1.0` for items with a `billing_method` of `weight`. If the `"quantity"` for the given `"item"` is greater than or equal to the quantity of that item already on the order, the item is completely removed from the order.
+The `"quantity"` field is optional. It will automatically default to `1` for items with a `"billing_method"` of `"unit"`, and `1.0` for items with a `"billing_method"` of `"weight"`. If the `"quantity"` for the given `"item"` is greater than or equal to the quantity of that item already on the order, the item is completely removed from the order.
 
 ---
 ### `/createorder`
@@ -126,7 +126,8 @@ Returns a JSON-encoded string with information about the order corresponding to 
 ```json
 {
   "order_id": "{the_order_id}",
-  "total": "pre_tax_order_total",
+  "total_without_specials": "pre_tax_order_total_without_specials",
+  "total_with_specials": "pre_tax_order_total_with_specials",
   "items": [
     {
       "name": "{item_1_name}",
@@ -142,4 +143,4 @@ Returns a JSON-encoded string with information about the order corresponding to 
 In this example, there were only two items in the order. In reality, it could be up to several dozen.
 
 ## Notes
-This kata involves an optimization problem that is very expensive to solve in some situations. We want to save the customer the most money possible when they have items that have specials. When computing order totals with items that have specials, great care needs to be put into figuring out the order in which to apply the specials that items have available. The easiest way to solve this problem is by brute-forcing the solution and exhausting all `n!` permutations of the items in the order. With anything more than a dozen items in a single order, it may take too long to compute the optimal solution if a customer is waiting for their total at checkout. The brute-force approach can be improved by realizing that only the permutations of the items that have specials need to be checked, not the permutations of all items in the order (since the items with specials are the only ones that can change the order total depending on the order in which they're applied). A smarter brute-force approach was implemented along with a fallback greedy approach that produces "pretty good" results even though they may not be optimal. The threshold for using the greedy approach is when an order has more than 8 items that have specials. It's likely that not many orders will have more than 8 items with specials, so most orders should still return the optimal total to the customer.
+This kata involves an optimization problem that may be very expensive to solve in some rare situations. We want to save the customer the most money possible when they have items that have specials. When computing order totals with items that have specials, great care needs to be put into figuring out the order in which to apply the specials that items have available. The easiest way to solve this problem is by brute-forcing the solution and exhausting all `n!` permutations of the items in the order. With anything more than a dozen items in a single order, it may take too long to compute the optimal solution if a customer is waiting for their total at checkout. The brute-force approach can be improved by realizing that only the permutations of the items that have specials need to be checked, not the permutations of all items in the order (since the items with specials are the only ones that can change the order total depending on the order in which they're applied). A smarter brute-force approach was implemented along with a fallback greedy approach that produces "pretty good" results even though they may not be optimal. The threshold for using the greedy approach is when an order has more than 8 items that have specials. It's likely that not many orders will have more than 8 items with specials, so most orders should still return the optimal total to the customer.
