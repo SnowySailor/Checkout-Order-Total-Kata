@@ -61,6 +61,8 @@ There are four specials that are supported:
   }
   ```
 
+**NOTE**: Any given item can only have (at most) a single special active at a time. Typically stores will only have one special active at a given time. With the specials that have been implemented, customers can be presented with a wide varriety of discounts because the specials are flexible and configurable.
+
 ### Create an order
 POST to `/createorder` to create a new order with a specified string id. Orders contain items that a customer wants to purchase.
 
@@ -68,7 +70,7 @@ POST to `/createorder` to create a new order with a specified string id. Orders 
 Perform a DELETE to `/deleteorder` to delete an existing order. This will terminate any data associated with this order.
 
 ### Get an order
-Perform a GET to `/getorder` to get an order's details. This returns the order with the list of items in it as well as the total cost (before and after application of specials so the client can display how much the customer saved).
+Perform a GET to `/getorder` to get an order's details. This returns the order with the list of items in it as well as the total cost (before and after application of specials so the client can display how much the customer saved). See the **Notes** section at the bottom of this README for details on how the order total is calculated.
 
 ## API
 ### `/createitem`
@@ -82,6 +84,8 @@ Used to create a new item definition in the application. Accepts JSON in the POS
 }
 ```
 The `"price"` field is the decimal cost of the item per billing unit. For example, if the `"price"` of a can of soup is set to $5.00 and the `"billing_method"` is set to `"unit"`, then the total pre-tax cost of 3 cans of soup would be 3 * $5.00, or $15.00. However, if the `"price"` of 1 pound of grapes is set to $2.35 and the grapes have a `"billing_method"` of `"weight"`, then 2 pounds of grapes would cost 2 * $2.35, or $4.70.
+
+It is not necessary to provide a `"special"` if the item being created does not have one active. To add a special to (or modify a special on) an existing item, go through the same process described above for changing the `"price"` but for the `"special"` this time.
 
 ---
 ### `/getitem?identifier={item_identifier}`
@@ -154,3 +158,5 @@ In this example, there were only two items in the order. In reality, it could be
 
 ## Notes
 This kata involves an optimization problem that may be very expensive to solve in some rare situations. We want to save the customer the most money possible when they have items that have specials. When computing order totals with items that have specials, great care needs to be put into figuring out the order in which to apply the specials that items have available. The easiest way to solve this problem is by brute-forcing the solution and exhausting all `n!` permutations of the items in the order. With anything more than a dozen items in a single order, it may take too long to compute the optimal solution if a customer is waiting for their total at checkout. The brute-force approach can be improved by realizing that only the permutations of the items that have specials need to be checked, not the permutations of all items in the order (since the items with specials are the only ones that can change the order total depending on the order in which they're applied). A smarter brute-force approach was implemented along with a fallback greedy approach that produces "pretty good" results even though they may not be optimal. The threshold for using the greedy approach is when an order has more than 8 items that have specials. It's likely that not many orders will have more than 8 items with specials, so most orders should still return the optimal total to the customer.
+
+For the code that went into the algorithms, see `/src/models/order.py`
