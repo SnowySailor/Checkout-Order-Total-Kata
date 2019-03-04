@@ -61,7 +61,7 @@ def MakeGetOrderTests(baseurl):
 
         def test_get_get_order_when_given_valid_order_id_with_specials_returns_correct_totals(self):
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 1.00}
             item  = {'name': 'soup', 'price': 2.00, 'billing_method': 'unit', 'special': special2}
             item2 = {'name': 'peas', 'price': 1.78, 'billing_method': 'unit'}
             item3 = {'name': 'chicken', 'price': 2.37, 'billing_method': 'weight'}

@@ -41,9 +41,9 @@ class Item:
             off = parse_float(get_value(special, 'off'), 0.0)
             self.special = GetEOLforAoff(off)
         elif special_type == 'markdown':
-            percentage = parse_float(get_value(special, 'percentage'), 0.0)
-            limit      = parse_int(get_value(special, 'limit'), None)
-            self.special = Markdown(percentage, limit)
+            price = parse_float(get_value(special, 'price'), 0.0)
+            limit = parse_int(get_value(special, 'limit'), None)
+            self.special = Markdown(price, limit)
 
     def to_json(self):
         # Push all item values into a dict and dump it as json

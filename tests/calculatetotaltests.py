@@ -57,7 +57,7 @@ def MakeCalculateTotalTests(baseurl):
             datastore = DataStore()
             special = {
                 'type': 'markdown',
-                'percentage': 25,
+                'price': 0.50,
                 'limit': 6
             }
             item  = self.create_item('soup', 2.00, 'unit', special, datastore)
@@ -76,8 +76,8 @@ def MakeCalculateTotalTests(baseurl):
 
         def test_calculate_total_for_order_with_two_markdown_specials_and_4_items(self):
             datastore = DataStore()
-            special1 = {'type': 'markdown','percentage': 25,'limit': 6}
-            special2 = {'type': 'markdown','percentage': 50}
+            special1 = {'type': 'markdown','price': 0.50,'limit': 6}
+            special2 = {'type': 'markdown','price': 0.89}
             item  = self.create_item('soup', 2.00, 'unit', special1, datastore)
             item2 = self.create_item('peas', 1.78, 'unit', special2, datastore)
             item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
@@ -112,7 +112,7 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_one_AforB_special_and_markdown_and_4_items(self):
             datastore = DataStore()
             special1 = {'type': 'AforB', 'buy': 2, 'for': 2.00}
-            special2 = {'type': 'markdown','percentage': 50}
+            special2 = {'type': 'markdown','price': 0.89}
             item  = self.create_item('soup', 2.00, 'unit', special1, datastore)
             item2 = self.create_item('peas', 1.78, 'unit', special2, datastore)
             item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
@@ -130,7 +130,7 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_one_getEOLforAoff_special_and_markdown_and_4_items(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 75}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 0.89}
             item  = self.create_item('soup', 2.00, 'unit', None, datastore)
             item2 = self.create_item('peas', 1.78, 'unit', special2, datastore)
             item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
@@ -148,7 +148,7 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_one_getEOLforAoff_special_and_markdown_and_4_items_2(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 1.00}
             item  = self.create_item('soup', 2.00, 'unit', special2, datastore)
             item2 = self.create_item('peas', 1.78, 'unit', None, datastore)
             item3 = self.create_item('chicken', 2.37, 'weight', None, datastore)
@@ -166,7 +166,7 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_one_getEOLforAoff_and_markdown_and_AforB_5_items(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 4.00}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
 
             item  = self.create_item('soup'   , 2.00, 'unit', special3, datastore)
@@ -188,10 +188,10 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_6_specials_and_10_items(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 4.00}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
             special4 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 50}
-            special5 = {'type': 'markdown', 'percentage': 25}
+            special5 = {'type': 'markdown', 'price': 0.50}
             special6 = {'type': 'getEOLforAoff', 'off': 35}
 
             item  = self.create_item('soup'    , 2.00, 'unit'  , special3, datastore)
@@ -223,10 +223,10 @@ def MakeCalculateTotalTests(baseurl):
         def test_calculate_total_for_order_with_6_specials_and_10_items_with_limits(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 4.00}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
             special4 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 50}
-            special5 = {'type': 'markdown', 'percentage': 25, 'limit': 5}
+            special5 = {'type': 'markdown', 'price': 0.72, 'limit': 5}
             special6 = {'type': 'getEOLforAoff', 'off': 35}
 
             item  = self.create_item('soup'    , 2.00, 'unit'  , special3, datastore)
@@ -253,17 +253,17 @@ def MakeCalculateTotalTests(baseurl):
             order.add_item(item10, 10)
 
             total = order.calculate_total()
-            self.assertEqual(total, 172.15)
+            self.assertEqual(total, 172.16)
 
         def test_calculate_total_greedy_for_order_with_9_specials_and_10_items(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 4.00}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
             special4 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 50}
-            special5 = {'type': 'markdown', 'percentage': 25}
+            special5 = {'type': 'markdown', 'price': 0.50}
             special6 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 100}
-            special7 = {'type': 'markdown', 'percentage': 35}
+            special7 = {'type': 'markdown', 'price': 0.62}
             special8 = {'type': 'getEOLforAoff', 'off': 35}
             special9 = {'type': 'AforB', 'buy': 2, 'for': 3.00}
 
@@ -292,17 +292,17 @@ def MakeCalculateTotalTests(baseurl):
             order.add_item(item10, 1)
 
             total = order.calculate_total()
-            self.assertEqual(total, 162.88)
+            self.assertEqual(total, 162.87)
 
         def test_calculate_total_greedy_for_order_with_9_specials_and_9_items(self):
             datastore = DataStore()
             special1 = {'type': 'getEOLforAoff', 'off': 25}
-            special2 = {'type': 'markdown', 'percentage': 50}
+            special2 = {'type': 'markdown', 'price': 4.00}
             special3 = {'type': 'AforB', 'buy': 3, 'for': 5.00}
             special4 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 50, 'limit': 2}
-            special5 = {'type': 'markdown', 'percentage': 25}
+            special5 = {'type': 'markdown', 'price': 0.22}
             special6 = {'type': 'buyAgetBforCoff', 'buy': 1, 'get': 1, 'off': 100}
-            special7 = {'type': 'markdown', 'percentage': 35}
+            special7 = {'type': 'markdown', 'price': 0.62}
             special8 = {'type': 'getEOLforAoff', 'off': 35}
             special9 = {'type': 'AforB', 'buy': 2, 'for': 3.00}
 

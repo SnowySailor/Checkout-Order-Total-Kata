@@ -167,21 +167,21 @@ def MakeHelpersTests(baseurl):
         def test_validate_special_markdown_with_weight_item_returns_ok(self):
             special = {
                 'type': 'markdown',
-                'percentage': 50
+                'price': 50
             }
             self.assertEqual(H.validate_special(special, 'weight'), '')
 
         def test_validate_special_markdown_with_unit_item_returns_ok(self):
             special = {
                 'type': 'markdown',
-                'percentage': 50
+                'price': 50
             }
             self.assertEqual(H.validate_special(special, 'unit'), '')
 
-        def test_validate_special_markdown_when_percentage_not_number_returns_error(self):
+        def test_validate_special_markdown_when_price_not_number_returns_error(self):
             special = {
                 'type': 'markdown',
-                'percentage': 'aaa'
+                'price': 'aaa'
             }
             self.assertNotEqual(H.validate_special(special, 'unit'), '')
 

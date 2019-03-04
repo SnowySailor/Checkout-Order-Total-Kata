@@ -1,14 +1,14 @@
 from src.helpers import get_value
 
 class Markdown:
-    def __init__(self, percentage, limit):
-        self.percentage = percentage
+    def __init__(self, price, limit):
+        self.price = price
         self.limit = limit
 
     def to_dict(self):
         d = dict()
         d['type'] = 'markdown'
-        d['percentage'] = self.percentage
+        d['price'] = self.price
         if self.limit is not None:
             d['limit'] = self.limit
         return d
@@ -22,6 +22,6 @@ class Markdown:
         if self.limit is not None and self.limit < quantity:
             quantity = self.limit
         
-        # Return the quantity saved with the markdown
-        savings = quantity * (self.percentage/100) * item.price
+        # Return the amount saved with the markdown
+        savings = quantity * self.price
         return (savings, [{'name': item.name, 'quantity': quantity}])

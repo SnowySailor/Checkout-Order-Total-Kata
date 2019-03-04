@@ -290,7 +290,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_50_off_with_2_items(self):
             special = {
                 'type': 'markdown',
-                'percentage': 50
+                'price': 1.00
             }
 
             datastore = DataStore()
@@ -302,7 +302,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_50_off_with_4_items_with_limit_2(self):
             special = {
                 'type': 'markdown',
-                'percentage': 50,
+                'price': 1.00,
                 'limit': 2
             }
 
@@ -315,7 +315,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_100_off_with_5_items_with_limit_5(self):
             special = {
                 'type': 'markdown',
-                'percentage': 100,
+                'price': 2.00,
                 'limit': 5
             }
 
@@ -328,7 +328,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_0_off_with_5_items_with_limit_5(self):
             special = {
                 'type': 'markdown',
-                'percentage': 0,
+                'price': 0.00,
                 'limit': 5
             }
 
@@ -341,7 +341,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_25_off_with_5_items_with_limit_1(self):
             special = {
                 'type': 'markdown',
-                'percentage': 25,
+                'price': 0.50,
                 'limit': 1
             }
 
@@ -354,7 +354,7 @@ def MakeCalculateBestSavingsTests(baseurl):
         def test_calculate_best_savings_for_markdown_with_25_off_with_5_items_with_limit_6(self):
             special = {
                 'type': 'markdown',
-                'percentage': 25,
+                'price': 0.50,
                 'limit': 6
             }
 

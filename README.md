@@ -23,11 +23,11 @@ POST to `/createitem` to create a new item in the system. This could be a box of
 
 ### Specials
 There are four specials that are supported:
-* A markdown (discount) on an item. This special can have a limit. If an item is marked down 50% and the limit is 5, a customer that purchases 10 items would get 5 of them at 50% off and the other 5 at full price. This special can be applied to all items (by unit or by weight). Example JSON:
+* A markdown (discount) on an item. This special can have a limit. If an item is marked down $0.50 and the limit is 5, a customer that purchases 10 items would get 5 of them at $0.50 off and the other 5 at full price. This special can be applied to all items (by unit or by weight). Example JSON:
   ```json
   {
     "type": "markdown",
-    "percentage": 50,
+    "price": 0.50,
     "limit": 5
   }
   ```
