@@ -64,6 +64,9 @@ There are four specials that are supported:
 ### Create an order
 POST to `/createorder` to create a new order with a specified string id. Orders contain items that a customer wants to purchase.
 
+### Delete an order
+Perform a DELETE to `/deleteorder` to delete an existing order. This will terminate any data associated with this order.
+
 ### Get an order
 Perform a GET to `/getorder` to get an order's details. This returns the order with the list of items in it as well as the total cost (before and after application of specials so the client can display how much the customer saved).
 
@@ -119,6 +122,15 @@ Create a new order to hold items for a customer. Accepts JSON in the POST body o
 }
 ```
 The `"id"` must be unique. It is suggested that a 128-bit UUID is used to prevent collisions from occurring. An order with a given `"id"` can only be created once and cannot be deleted.
+
+---
+### `/deleteorder`
+Delete an existing order. Accepts JSON in the DELETE body of the form:
+```json
+{
+  "id": "{doomed_order_id}"
+}
+```
 
 ---
 ### `/getorder?id={order_id}`
