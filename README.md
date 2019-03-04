@@ -78,12 +78,10 @@ Used to create a new item definition in the application. Accepts JSON in the POS
   "identifier": "{item_identifier}",
   "price": "item_price_per_unit_as_number",
   "billing_method": "{either 'weight' or 'unit'}",
-  "special": {"special": "json"}
+  "special": "special_json_(see_above)"
 }
 ```
-The `"price"` field is the decimal cost of the item per billing unit. For example, if the `"price"` of a can of soup is set to $5.00 and the `"billing_method"` is set to `"unit"`, then the total pre-tax cost of 3 cans of soup would be 3 * $5.00, or $15.00. However, if the `"price"` of 1 pound of grapes is set to $2.35 and the grapes have a `"billing_method"` of 'weight', then 2 pounds of grapes would cost 2 * $2.35, or $4.70.
-
-To mark down an item's price, simply re-POST the same JSON with the updated price. All existing orders will have their totals updated automatically.
+The `"price"` field is the decimal cost of the item per billing unit. For example, if the `"price"` of a can of soup is set to $5.00 and the `"billing_method"` is set to `"unit"`, then the total pre-tax cost of 3 cans of soup would be 3 * $5.00, or $15.00. However, if the `"price"` of 1 pound of grapes is set to $2.35 and the grapes have a `"billing_method"` of `"weight"`, then 2 pounds of grapes would cost 2 * $2.35, or $4.70.
 
 ---
 ### `/getitem?identifier={item_identifier}`
